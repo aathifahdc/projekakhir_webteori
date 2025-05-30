@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Module</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <h2>Product List</h2>
+  <input type="text" id="search" onkeyup="filterTable()" placeholder="Search products..." />
+
+  <table id="productTable">
+    <thead>
+      <tr><th>Name</th><th>Price</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Marie Cat Plush</td><td>$10</td><td>Edit | Delete</td></tr>
+      <tr><td>Catnip Toy</td><td>$5</td><td>Edit | Delete</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    function filterTable() {
+      const query = document.getElementById('search').value.toLowerCase();
+      const rows = document.querySelectorAll("#productTable tbody tr");
+      rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(query) ? "" : "none";
+      });
+    }
+  </script>
+</body>
+</html>
