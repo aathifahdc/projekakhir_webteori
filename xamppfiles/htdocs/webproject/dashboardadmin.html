@@ -1,15 +1,191 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Admin - Marie Cat Shop</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: "#FFB6C1", secondary: "#F5F5F5" },
+          borderRadius: {
+            none: "0px",
+            sm: "4px",
+            DEFAULT: "8px",
+            md: "12px",
+            lg: "16px",
+            xl: "20px",
+            "2xl": "24px",
+            "3xl": "32px",
+            full: "9999px",
+            button: "8px",
+          },
+        },
+      },
+    };
+  </script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+  />
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #FFF5F7;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Poppins', sans-serif;
+    }
+    .logo-text {
+      font-family: 'Pacifico', serif;
+    }
+    /* Sidebar style */
+    .sidebar {
+      background-color: #FFB6C1;
+      min-width: 220px;
+      border-radius: 16px;
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: white;
+      font-weight: 600;
+      border-radius: 12px;
+      margin: 6px 12px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .sidebar a:hover, .sidebar a.active {
+      background-color: #FF8DAA;
+    }
+    .sidebar a i {
+      margin-right: 12px;
+      font-size: 1.3rem;
+    }
+    /* Content style */
+    .content {
+      flex: 1;
+      padding: 24px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #FFB6C1;
+      color: white;
+      font-weight: 600;
+    }
+    tbody tr:hover {
+      background-color: #ffe2ec;
+    }
+  </style>
 </head>
-<body>
-  <h1>Welcome, Admin!</h1>
-  <nav>
-    <a href="products.html">Manage Products</a>
-    <a href="users.html">Manage Users</a>
-    <a href="php/logout.php">Logout</a>
-  </nav>
+<body class="min-h-screen flex p-6">
+  <aside class="sidebar flex flex-col rounded-2xl shadow-lg">
+    <div class="flex items-center justify-center py-6">
+      <div class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-md">
+        <span class="logo-text text-primary text-4xl">Marie</span>
+      </div>
+    </div>
+    <nav class="flex flex-col flex-grow">
+      <a href="#" class="active" aria-current="page">
+        <i class="ri-dashboard-line"></i> Dashboard
+      </a>
+      <a href="#">
+        <i class="ri-store-line"></i> Kelola Produk
+      </a>
+      <a href="#">
+        <i class="ri-shopping-bag-line"></i> Kelola Pesanan
+      </a>
+      <a href="#">
+        <i class="ri-user-settings-line"></i> Kelola Pengguna
+      </a>
+      <a href="#">
+        <i class="ri-settings-3-line"></i> Pengaturan
+      </a>
+      <a href="#">
+        <i class="ri-logout-box-line"></i> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <main class="content bg-white rounded-2xl shadow-lg">
+    <header class="p-6 border-b border-gray-200">
+      <h1 class="text-3xl font-bold text-gray-800">Halo, Admin Marie! 🐱‍👤</h1>
+      <p class="text-gray-600 mt-1">Kelola toko dengan mudah dari dashboard ini.</p>
+    </header>
+
+    <section class="p-6 space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-primary/20 rounded-xl p-6 shadow-sm text-center">
+          <h2 class="font-semibold text-lg text-gray-800 mb-2">Total Produk</h2>
+          <p class="text-gray-700 text-2xl font-bold">125</p>
+        </div>
+        <div class="bg-primary/20 rounded-xl p-6 shadow-sm text-center">
+          <h2 class="font-semibold text-lg text-gray-800 mb-2">Pesanan Baru</h2>
+          <p class="text-gray-700 text-2xl font-bold">27</p>
+        </div>
+        <div class="bg-primary/20 rounded-xl p-6 shadow-sm text-center">
+          <h2 class="font-semibold text-lg text-gray-800 mb-2">Pengguna Terdaftar</h2>
+          <p class="text-gray-700 text-2xl font-bold">842</p>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-semibold text-xl text-gray-800 mb-4">Daftar Pesanan Terbaru</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Nomor Pesanan</th>
+              <th>Nama Pelanggan</th>
+              <th>Tanggal</th>
+              <th>Status</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#00123</td>
+              <td>Sarah Kucing</td>
+              <td>29 Mei 2025</td>
+              <td><span class="text-green-600 font-semibold">Selesai</span></td>
+              <td>Rp 350.000</td>
+            </tr>
+            <tr>
+              <td>#00124</td>
+              <td>Budi Kucing</td>
+              <td>30 Mei 2025</td>
+              <td><span class="text-yellow-500 font-semibold">Proses</span></td>
+              <td>Rp 150.000</td>
+            </tr>
+            <tr>
+              <td>#00125</td>
+              <td>Anna Kucing</td>
+              <td>31 Mei 2025</td>
+              <td><span class="text-red-500 font-semibold">Batal</span></td>
+              <td>Rp 0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

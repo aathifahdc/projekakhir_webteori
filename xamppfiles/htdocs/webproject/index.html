@@ -1,20 +1,384 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login</title>
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
-  <div class="login-container">
-    <h2>Login</h2>
-    <form action="php/login.php" method="POST" onsubmit="return validateLogin()">
-      <input type="text" name="username" placeholder="Username" required />
-      <input type="password" name="password" placeholder="Password" required minlength="6"/>
-      <button type="submit">Login</button>
-    </form>
-  </div>
-  <script src="js/script.js"></script>
-</body>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marie Cat Shop - Login</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#FFB6C1", secondary: "#F5F5F5" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      :where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+          font-family: 'Open Sans', sans-serif;
+          background-color: #FFF5F7;
+      }
+      h1, h2, h3, h4, h5, h6 {
+          font-family: 'Poppins', sans-serif;
+      }
+      .logo-text {
+          font-family: 'Pacifico', serif;
+      }
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+      }
+      .cat-loading {
+          animation: bounce 1s infinite alternate;
+      }
+      @keyframes bounce {
+          from { transform: translateY(0); }
+          to { transform: translateY(-10px); }
+      }
+      .custom-checkbox {
+          appearance: none;
+          width: 18px;
+          height: 18px;
+          border: 2px solid #FFB6C1;
+          border-radius: 4px;
+          background-color: white;
+          cursor: pointer;
+          position: relative;
+      }
+      .custom-checkbox:checked {
+          background-color: #FFB6C1;
+      }
+      .custom-checkbox:checked::after {
+          content: "";
+          position: absolute;
+          left: 5px;
+          top: 2px;
+          width: 6px;
+          height: 10px;
+          border: solid white;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <div class="flex-1 flex items-center justify-center p-4 sm:p-6 md:p-8">
+      <div class="w-full max-w-md">
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="bg-primary/20 p-6 flex flex-col items-center">
+            <div
+              class="w-24 h-24 rounded-full bg-white flex items-center justify-center shadow-md mb-4"
+            >
+              <span class="logo-text text-primary text-3xl">Marie</span>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800 mb-1">
+              Marie Cat Shop
+            </h1>
+            <p class="text-gray-600 text-sm">
+              Selamat datang di toko online Marie The Cat
+            </p>
+          </div>
+
+          <div class="p-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-6">
+              Masuk ke Akun Anda
+            </h2>
+
+            <form id="loginForm">
+              <div class="mb-4">
+                <label
+                  for="username"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Username</label
+                >
+                <div class="relative">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <i class="ri-user-line text-gray-400"></i>
+                  </div>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="pl-10 w-full h-11 px-4 py-2 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                    placeholder="Masukkan username"
+                    required
+                  />
+                </div>
+                <p
+                  id="usernameError"
+                  class="mt-1 text-sm text-red-500 hidden"
+                ></p>
+              </div>
+
+              <div class="mb-4">
+                <label
+                  for="password"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Password</label
+                >
+                <div class="relative">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <i class="ri-lock-line text-gray-400"></i>
+                  </div>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="pl-10 w-full h-11 px-4 py-2 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                    placeholder="Masukkan password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    id="togglePassword"
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  >
+                    <i class="ri-eye-line text-gray-400"></i>
+                  </button>
+                </div>
+                <p
+                  id="passwordError"
+                  class="mt-1 text-sm text-red-500 hidden"
+                ></p>
+              </div>
+
+              <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    name="remember"
+                    class="custom-checkbox"
+                  />
+                  <label for="remember" class="ml-2 text-sm text-gray-600"
+                    >Ingat saya</label
+                  >
+                </div>
+                <a
+                  href="#"
+                  class="text-sm text-primary hover:text-primary/80 font-medium"
+                  >Lupa password?</a
+                >
+              </div>
+
+              <button
+                type="submit"
+                class="w-full bg-primary text-white font-medium py-2.5 px-4 rounded-button hover:bg-primary/90 transition duration-200 flex items-center justify-center h-11"
+              >
+                <span>Masuk</span>
+              </button>
+
+              <div class="mt-6 text-center">
+                <p class="text-sm text-gray-600">
+                  Belum punya akun?
+                  <a
+                    href="#"
+                    class="text-primary font-medium hover:text-primary/80"
+                    >Daftar sekarang</a
+                  >
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="mt-8 text-center">
+          <p class="text-xs text-gray-500">
+            © 2025 Marie Cat Shop. Semua hak dilindungi.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      id="loadingOverlay"
+      class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 hidden"
+    >
+      <div class="text-center">
+        <div class="cat-loading mb-4">
+          <img
+            src="https://readdy.ai/api/search-image?query=cute%20white%20cat%20Marie%20from%20Aristocats%2C%20cartoon%20style%2C%20simple%2C%20cute%2C%20pink%20bow%2C%20minimalist%2C%20white%20background%2C%20vector%20style%20illustration&width=150&height=150&seq=marie1&orientation=squarish"
+            alt="Marie Cat Loading"
+            class="w-24 h-24 mx-auto"
+          />
+        </div>
+        <p class="text-primary font-medium">Sedang memuat...</p>
+      </div>
+    </div>
+
+  
+    <div
+      id="roleModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
+    >
+      <div class="bg-white rounded-lg p-6 max-w-md w-full">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">
+          Pilih Peran untuk Demo
+        </h3>
+        <p class="text-gray-600 mb-6">
+          Pilih peran untuk melihat dashboard yang sesuai:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <button
+            id="adminRole"
+            class="bg-primary/10 hover:bg-primary/20 text-gray-800 font-medium py-3 px-4 rounded-button border-2 border-primary flex flex-col items-center"
+          >
+            <i class="ri-admin-line text-2xl text-primary mb-2"></i>
+            <span>Admin</span>
+          </button>
+
+          <button
+            id="userRole"
+            class="bg-secondary hover:bg-secondary/80 text-gray-800 font-medium py-3 px-4 rounded-button border-2 border-gray-200 flex flex-col items-center"
+          >
+            <i class="ri-user-line text-2xl text-gray-600 mb-2"></i>
+            <span>Pengguna</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script id="password-toggle">
+      document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.getElementById("togglePassword");
+        const password = document.getElementById("password");
+
+        togglePassword.addEventListener("click", function () {
+          const type =
+            password.getAttribute("type") === "password" ? "text" : "password";
+          password.setAttribute("type", type);
+
+          // Toggle eye icon
+          const eyeIcon = togglePassword.querySelector("i");
+          if (type === "text") {
+            eyeIcon.classList.remove("ri-eye-line");
+            eyeIcon.classList.add("ri-eye-off-line");
+          } else {
+            eyeIcon.classList.remove("ri-eye-off-line");
+            eyeIcon.classList.add("ri-eye-line");
+          }
+        });
+      });
+    </script>
+
+  <script id="form-validation">
+  document.addEventListener("DOMContentLoaded", function () {
+    const loginForm = document.getElementById("loginForm");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const usernameError = document.getElementById("usernameError");
+    const passwordError = document.getElementById("passwordError");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+
+    // ✅ Data akun untuk demo
+    const users = [
+      { username: "admin", password: "admin123", role: "admin" },
+      { username: "user1", password: "user123", role: "user" },
+      { username: "user2", password: "meong456", role: "user" },
+    ];
+
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      // Reset error
+      usernameError.classList.add("hidden");
+      passwordError.classList.add("hidden");
+
+      let isValid = true;
+
+      // Validasi form
+      if (usernameInput.value.trim() === "") {
+        usernameError.textContent = "Username tidak boleh kosong";
+        usernameError.classList.remove("hidden");
+        isValid = false;
+      }
+
+      if (passwordInput.value.trim() === "") {
+        passwordError.textContent = "Password tidak boleh kosong";
+        passwordError.classList.remove("hidden");
+        isValid = false;
+      } else if (passwordInput.value.length < 6) {
+        passwordError.textContent = "Password minimal 6 karakter";
+        passwordError.classList.remove("hidden");
+        isValid = false;
+      }
+
+      if (isValid) {
+        // Tampilkan loading
+        loadingOverlay.classList.remove("hidden");
+
+        setTimeout(function () {
+          loadingOverlay.classList.add("hidden");
+
+          const foundUser = users.find(
+            (user) =>
+              user.username === usernameInput.value &&
+              user.password === passwordInput.value
+          );
+
+          if (foundUser) {
+            if (foundUser.role === "admin") {
+              window.location.href = "admin-dashboard.html";
+            } else {
+              window.location.href = "user-dashboard.html";
+            }
+          } else {
+            passwordError.textContent = "Username atau password salah";
+            passwordError.classList.remove("hidden");
+          }
+        }, 1000);
+      }
+    });
+  });
+</script>
+
+
+    <script id="role-selection">
+      document.addEventListener("DOMContentLoaded", function () {
+        const adminRole = document.getElementById("adminRole");
+        const userRole = document.getElementById("userRole");
+
+        adminRole.addEventListener("click", function () {
+          window.location.href = "admin-dashboard.html";
+        });
+
+        userRole.addEventListener("click", function () {
+          window.location.href = "user-dashboard.html";
+        });
+      });
+    </script>
+  </body>
 </html>
