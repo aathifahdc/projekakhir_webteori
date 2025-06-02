@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang Belanja - Marie Cat Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFA07A',
+                        secondary: '#FF8C61',
+                        orangeLight: '#FFD8CC',
+                        orangeDark: '#FF7F50'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Salin semua CSS dari dashboard.html */
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #FFF5F7;
+            display: flex;
+            min-height: 100vh;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Open Sans', sans-serif;
+        }
+        .logo-text {
+            font-family: 'Pacifico', serif;
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #FFA07A;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #FF7F50;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        body {
+            padding-left: 256px;
+        }
+        #top-bar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 256px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            z-index: 40;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            width: calc(100% - 256px);
+        }
+        #main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            padding-top: 5rem;
+            background-color: #fcfcfc;
+        }
+        #auth-buttons {
+            display: none !important;
+        }
+        #user-profile-button, #logout-button-top {
+            display: flex !important;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .cart-item img {
+            width: 80px; /* Slightly larger for cart page */
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 min-h-screen">
+
+    <div id="top-bar">
+        <a href="keranjang.html" id="cart-button" class="relative bg-primary hover:bg-orangeDark text-white px-4 py-2 rounded-button transition-colors flex items-center shadow-sm">
+            <i class="ri-shopping-cart-2-line mr-2"></i> Keranjang
+            <span id="cart-item-count" class="cart-count hidden">0</span>
+        </a>
+        <div id="auth-buttons" class="flex gap-4">
+            <a href="login.html" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-button transition-colors">
+                Login
+            </a>
+            <a href="regist.html" class="bg-primary hover:bg-orangeDark text-white font-bold py-2 px-6 rounded-button transition-colors">
+                Daftar
+            </a>
+        </div>
+        <button id="user-profile-button" class="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-button transition-colors">
+            <i class="ri-user-line"></i> <span id="display-username">User</span>
+        </button>
+        <button id="logout-button-top" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-button transition-colors">
+            Logout
+        </button>
+    </div>
+
+    <header id="main-header" class="fixed top-0 left-0 h-screen w-64 bg-white shadow-lg z-50 flex flex-col pt-20">
+        <div class="p-4">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="w-12 h-12 flex items-center justify-center text-primary">
+                    <i class="ri-footprint-fill ri-2x"></i>
+                </div>
+                <h1 class="text-3xl font-['Pacifico'] text-primary">Marie</h1>
+            </div>
+            <nav class="flex flex-col space-y-4">
+                <a href="dashboarduser.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-home-line mr-3"></i>Beranda
+                </a>
+                <a href="produk.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-shopping-bag-line mr-3"></i>Produk
+                </a>
+                <a href="pesananuser.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-shopping-bag-line mr-3"></i> Pesanan Saya
+                </a>
+                <a href="wishlist.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-heart-line mr-3"></i> Wishlist
+                </a>
+                <a href="profile.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-user-line mr-3"></i> Profil
+                </a>
+                <a href="setting.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-settings-4-line mr-3"></i> Pengaturan
+                </a>
+            </nav>
+        </div>
+        <div class="mt-auto p-4 border-t border-gray-200">
+            <button id="logout-button-sidebar" class="flex items-center text-gray-700 hover:text-red-500 cursor-pointer transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight w-full text-left">
+                <i class="ri-logout-box-line mr-3"></i>
+                <span>Keluar</span>
+            </button>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section id="cart-content" class="bg-white p-8 rounded-lg shadow-md">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Keranjang Belanja Anda</h1>
+            <div id="cart-items-container" class="max-h-[60vh] overflow-y-auto mb-4 border rounded-md p-4">
+                <p id="empty-cart-message" class="text-gray-600 text-center py-8">Keranjang Anda kosong.</p>
+            </div>
+            <div class="flex justify-between items-center border-t pt-4">
+                <span class="text-xl font-bold text-gray-800">Total: <span id="cart-total-price">Rp 0</span></span>
+                <button id="checkout-button" class="bg-orangeDark hover:bg-primary text-white font-semibold py-3 px-6 rounded-button transition duration-300" disabled>
+                    Lanjutkan ke Checkout
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userProfileButton = document.getElementById('user-profile-button');
+            const displayUsername = document.getElementById('display-username');
+            const logoutButtonTop = document.getElementById('logout-button-top');
+            const logoutButtonSidebar = document.getElementById('logout-button-sidebar');
+
+            const cartItemCount = document.getElementById('cart-item-count');
+            const cartItemsContainer = document.getElementById('cart-items-container');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const cartTotalPrice = document.getElementById('cart-total-price');
+            const checkoutButton = document.getElementById('checkout-button');
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            const products = [ // Sample Product Data (Anda bisa menyimpannya di file JS terpisah dan mengimpornya)
+                { id: 1, name: "Kalung Marie Premium", price: 89000, image: "https://readdy.ai/api/search-image?query=cute%2520pink%2520cat%2520collar%2520with%2520bell%2520and%2520bow%252C%2520Marie%2520cat%2520style%252C%2520product%2520photography%2520on%2520clean%2520white%2520background%252C%2520soft%2520lighting%252C%2520high%2520quality%2520detailed%2520illustration%252C%2520e-commerce%2520style&width=400&height=300&seq=marie-cat-collar&orientation=landscape", description: "Kalung kucing premium dengan lonceng dan pita merah muda, sempurna untuk gaya Marie.", rating: 4.5, reviews: 128, isBestSeller: true },
+                { id: 2, name: "Tempat Tidur Marie", price: 349000, image: "https://readdy.ai/api/search-image?query=luxury%2520cat%2520bed%2520in%2520pink%2520and%2520white%2520colors%252C%2520Marie%2520cat%2520style%252C%2520soft%2520plush%2520material%252C%2520product%2520photography%2520on%2520clean%2520white%2520background%252C%2520soft%2520lighting%252C%2520high%2520quality%2520detailed%2520product%2520shot%252C%2520e-commerce%2520style&width=400&height=300&seq=marie-cat-bed&orientation=landscape", description: "Tempat tidur kucing mewah dengan bahan lembut dan nyaman, desain terinspirasi Marie.", rating: 5, reviews: 95, isBestSeller: true },
+                { id: 3, name: "Makanan Premium Marie", price: 125000, image: "https://readdy.ai/api/search-image?query=premium%2520cat%2520food%2520in%2520elegant%2520packaging%252C%2520pink%2520and%2520white%2520colors%252C%2520Marie%2520cat%2520style%252C%2520product%2520photography%2520on%2520clean%2520white%2520background%252C%2520soft%2520lighting%252C%2520high%2520quality%2520detailed%2520product%2520shot%252C%2520e-commerce%2520style&width=400&height=300&seq=marie-cat-food&orientation=landscape", description: "Makanan kucing premium dengan nutrisi lengkap untuk kesehatan dan kebahagiaan kucing Anda.", rating: 4, reviews: 76, isBestSeller: false },
+                { id: 4, name: "Mainan Bola Berbulu Marie", price: 35000, image: "https://readdy.ai/api/search-image?query=fluffy%2520cat%2520toy%2520ball%2520with%2520pink%2520ribbon%252C%2520Marie%2520cat%2520style%252C%2520product%2520photography%2520on%2520clean%2520white%2520background%252C%2520soft%2520lighting%252C%2520high%2520quality%2520detailed%2520illustration%252C%2520e-commerce%2520style&width=400&height=300&seq=marie-cat-toy&orientation=landscape", description: "Mainan bola berbulu lembut dengan pita, menarik perhatian kucing Anda untuk bermain.", rating: 4.8, reviews: 200, isBestSeller: true },
+                { id: 5, name: "Sisir Grooming Marie", price: 65000, image: "https://readdy.ai/api/search-image?query=cat%2520grooming%2520brush%2520in%2520pink%2520and%2520white%2520colors%252C%2520Marie%2520cat%2520style%252C%2520product%2520photography%2520on%2520clean%2520white%2520background%252C%2520soft%2520lighting%252C%2520high%2520quality%2520detailed%2520illustration%252C%2520e-commerce%2520style&width=400&height=300&seq=marie-cat-brush&orientation=landscape", description: "Sisir grooming yang nyaman untuk merawat bulu kucing agar tetap indah dan sehat.", rating: 4.2, reviews: 80, isBestSeller: false }
+            ];
+
+            const formatRupiah = (amount) => {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(amount);
+            };
+
+            // Autentikasi dan Logout (sama seperti di dashboard.html)
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userRole = localStorage.getItem('userRole');
+
+            if (isLoggedIn !== 'true' || userRole !== 'user') {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('rememberUsername');
+                window.location.href = "index.html";
+            } else {
+                const username = localStorage.getItem('rememberUsername');
+                if (username) {
+                    displayUsername.textContent = username;
+                }
+            }
+
+            function handleLogout() {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('rememberUsername');
+                localStorage.removeItem('cart');
+                window.location.href = "index.html";
+            }
+
+            logoutButtonTop.addEventListener('click', handleLogout);
+            logoutButtonSidebar.addEventListener('click', handleLogout);
+
+            // Shopping Cart Functions (ini adalah inti dari halaman keranjang)
+            function updateCartCountDisplay() {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                if (totalItems > 0) {
+                    cartItemCount.textContent = totalItems;
+                    cartItemCount.classList.remove('hidden');
+                } else {
+                    cartItemCount.classList.add('hidden');
+                }
+            }
+
+            function calculateCartTotal() {
+                let total = 0;
+                cart.forEach(item => {
+                    total += item.price * item.quantity;
+                });
+                cartTotalPrice.textContent = formatRupiah(total);
+                checkoutButton.disabled = cart.length === 0;
+            }
+
+            function renderCartItems() {
+                cartItemsContainer.innerHTML = '';
+                if (cart.length === 0) {
+                    emptyCartMessage.classList.remove('hidden');
+                } else {
+                    emptyCartMessage.classList.add('hidden');
+                    cart.forEach(item => {
+                        const cartItemDiv = document.createElement('div');
+                        cartItemDiv.className = 'cart-item';
+                        cartItemDiv.innerHTML = `
+                            <img src="${item.image}" alt="${item.name}">
+                            <div class="flex-grow">
+                                <h4 class="font-semibold text-gray-800">${item.name}</h4>
+                                <p class="text-gray-600 text-sm">${formatRupiah(item.price)} x ${item.quantity}</p>
+                            </div>
+                            <div class="flex items-center">
+                                <button class="quantity-btn bg-gray-200 text-gray-700 px-2 py-1 rounded-sm hover:bg-gray-300 transition-colors" data-id="${item.id}" data-action="decrease">-</button>
+                                <span class="mx-2">${item.quantity}</span>
+                                <button class="quantity-btn bg-gray-200 text-gray-700 px-2 py-1 rounded-sm hover:bg-gray-300 transition-colors" data-id="${item.id}" data-action="increase">+</button>
+                                <button class="remove-from-cart-btn text-red-500 hover:text-red-700 ml-4" data-id="${item.id}">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </div>
+                        `;
+                        cartItemsContainer.appendChild(cartItemDiv);
+                    });
+                }
+                calculateCartTotal();
+                updateCartCountDisplay();
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+
+            function updateQuantity(productId, action) {
+                const itemIndex = cart.findIndex(item => item.id === productId);
+                if (itemIndex > -1) {
+                    if (action === 'increase') {
+                        cart[itemIndex].quantity++;
+                    } else if (action === 'decrease') {
+                        cart[itemIndex].quantity--;
+                        if (cart[itemIndex].quantity <= 0) {
+                            cart.splice(itemIndex, 1);
+                        }
+                    }
+                    renderCartItems();
+                }
+            }
+
+            function removeFromCart(productId) {
+                cart = cart.filter(item => item.id !== productId);
+                renderCartItems();
+            }
+
+            cartItemsContainer.addEventListener('click', function(event) {
+                if (event.target.classList.contains('quantity-btn')) {
+                    const productId = parseInt(event.target.dataset.id);
+                    const action = event.target.dataset.action;
+                    updateQuantity(productId, action);
+                } else if (event.target.closest('.remove-from-cart-btn')) {
+                    const productId = parseInt(event.target.closest('.remove-from-cart-btn').dataset.id);
+                    removeFromCart(productId);
+                }
+            });
+
+            checkoutButton.addEventListener('click', function() {
+                alert('Fungsi checkout akan segera tersedia!');
+            });
+
+            renderCartItems(); // Initial cart rendering
+        });
+    </script>
+</body>
+</html>

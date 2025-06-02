@@ -1,152 +1,281 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pengaturan - Marie Cat Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: { primary: "#FFB6C1", secondary: "#F5F5F5" },
-            borderRadius: { button: "8px", "2xl": "24px" },
-          },
-        },
-      };
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFA07A',
+                        secondary: '#FF8C61',
+                        orangeLight: '#FFD8CC',
+                        orangeDark: '#FF7F50'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    }
+                }
+            }
+        }
     </script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
-    />
     <style>
-      body {
-        font-family: "Open Sans", sans-serif;
-        background-color: #fff5f7;
-      }
-      .logo-text {
-        font-family: "Pacifico", serif;
-      }
-      .sidebar {
-        background-color: #ffb6c1;
-        min-width: 220px;
-        border-radius: 16px;
-      }
-      .sidebar a {
-        display: flex;
-        align-items: center;
-        padding: 12px 20px;
-        color: white;
-        font-weight: 600;
-        border-radius: 12px;
-        margin: 6px 12px;
-        text-decoration: none;
-        transition: background-color 0.3s ease;
-      }
-      .sidebar a:hover,
-      .sidebar a.active {
-        background-color: #ff8daa;
-      }
-      .sidebar a i {
-        margin-right: 12px;
-        font-size: 1.3rem;
-      }
+        /* Salin semua CSS dari dashboard.html */
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #FFF5F7;
+            display: flex;
+            min-height: 100vh;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Open Sans', sans-serif;
+        }
+        .logo-text {
+            font-family: 'Pacifico', serif;
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #FFA07A;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #FF7F50;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        body {
+            padding-left: 256px;
+        }
+        #top-bar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 256px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            z-index: 40;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            width: calc(100% - 256px);
+        }
+        #main-content {
+            flex-grow: 1;
+            padding: 2rem;
+            padding-top: 5rem;
+            background-color: #fcfcfc;
+        }
+        #auth-buttons {
+            display: none !important;
+        }
+        #user-profile-button, #logout-button-top {
+            display: flex !important;
+        }
     </style>
-  </head>
-  <body class="min-h-screen flex p-6">
-    <!-- Sidebar -->
-    <aside class="sidebar flex flex-col rounded-2xl shadow-lg">
-      <div class="flex items-center justify-center py-6">
-        <div
-          class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-md"
-        >
-          <span class="logo-text text-primary text-4xl">Marie</span>
+</head>
+<body class="font-sans text-gray-800 min-h-screen">
+
+    <div id="top-bar">
+        <a href="keranjang.html" id="cart-button" class="relative bg-primary hover:bg-orangeDark text-white px-4 py-2 rounded-button transition-colors flex items-center shadow-sm">
+            <i class="ri-shopping-cart-2-line mr-2"></i> Keranjang
+            <span id="cart-item-count" class="cart-count hidden">0</span>
+        </a>
+        <div id="auth-buttons" class="flex gap-4">
+            <a href="login.html" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-button transition-colors">
+                Login
+            </a>
+            <a href="regist.html" class="bg-primary hover:bg-orangeDark text-white font-bold py-2 px-6 rounded-button transition-colors">
+                Daftar
+            </a>
         </div>
-      </div>
-      <nav class="flex flex-col flex-grow">
-        <a href="dashboardadmin.html"
-          ><i class="ri-dashboard-line"></i> Dashboard</a
-        >
-        <a href="kelolaproduk.html"
-          ><i class="ri-store-line"></i> Kelola Produk</a
-        >
-        <a href="kelolapesanan.html"
-          ><i class="ri-shopping-bag-line"></i> Kelola Pesanan</a
-        >
-        <a href="kelolapengguna.html"
-          ><i class="ri-user-settings-line"></i> Kelola Pengguna</a
-        >
-        <a href="setting.html" class="active"
-          ><i class="ri-settings-3-line"></i> Pengaturan</a
-        >
-        <a href="logout.php"><i class="ri-logout-box-line"></i> Logout</a>
-      </nav>
-    </aside>
+        <button id="user-profile-button" class="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-button transition-colors">
+            <i class="ri-user-line"></i> <span id="display-username">User</span>
+        </button>
+        <button id="logout-button-top" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-button transition-colors">
+            Logout
+        </button>
+    </div>
 
-    <!-- Main Content -->
-    <main class="bg-white rounded-2xl shadow-lg flex-1 p-8 space-y-8">
-      <header class="border-b pb-4">
-        <h1 class="text-3xl font-bold text-gray-800">Pengaturan ⚙️</h1>
-        <p class="text-gray-600">Ubah informasi toko dan akun admin.</p>
-      </header>
+    <header id="main-header" class="fixed top-0 left-0 h-screen w-64 bg-white shadow-lg z-50 flex flex-col pt-20">
+        <div class="p-4">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="w-12 h-12 flex items-center justify-center text-primary">
+                    <i class="ri-footprint-fill ri-2x"></i>
+                </div>
+                <h1 class="text-3xl font-['Pacifico'] text-primary">Marie</h1>
+            </div>
+            <nav class="flex flex-col space-y-4">
+                <a href="dashboarduser.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-home-line mr-3"></i>Beranda
+                </a>
+                <a href="produk.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-shopping-bag-line mr-3"></i>Produk
+                </a>
+                <a href="pesananuser.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-shopping-bag-line mr-3"></i> Pesanan Saya
+                </a>
+                <a href="wishlist.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-heart-line mr-3"></i> Wishlist
+                </a>
+                <a href="profile.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-user-line mr-3"></i> Profil
+                </a>
+                <a href="setting.html" class="nav-link font-medium text-primary hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                    <i class="ri-settings-4-line mr-3"></i> Pengaturan
+                </a>
+            </nav>
+        </div>
+        <div class="mt-auto p-4 border-t border-gray-200">
+            <button id="logout-button-sidebar" class="flex items-center text-gray-700 hover:text-red-500 cursor-pointer transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight w-full text-left">
+                <i class="ri-logout-box-line mr-3"></i>
+                <span>Keluar</span>
+            </button>
+        </div>
+    </header>
 
-      <section>
-        <h2 class="text-xl font-semibold mb-4 text-gray-700">Informasi Toko</h2>
-        <form class="space-y-4">
-          <input
-            type="text"
-            placeholder="Nama Toko"
-            value="Marie Cat Shop"
-            class="w-full border px-4 py-2 rounded-md"
-          />
-          <input
-            type="email"
-            placeholder="Email Toko"
-            value="admin@mariecatshop.com"
-            class="w-full border px-4 py-2 rounded-md"
-          />
-          <textarea
-            placeholder="Alamat Toko"
-            rows="3"
-            class="w-full border px-4 py-2 rounded-md"
-          >
-Jl. Meong Bahagia No. 123</textarea
-          >
-          <button
-            type="submit"
-            class="bg-primary hover:bg-pink-400 text-white px-6 py-2 rounded-button font-medium"
-          >
-            Simpan Perubahan
-          </button>
-        </form>
-      </section>
+    <main id="main-content">
+        <section id="settings-section" class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Pengaturan Akun</h1>
 
-      <section>
-        <h2 class="text-xl font-semibold mb-4 text-gray-700">Ubah Password</h2>
-        <form class="space-y-4">
-          <input
-            type="password"
-            placeholder="Password Lama"
-            class="w-full border px-4 py-2 rounded-md"
-          />
-          <input
-            type="password"
-            placeholder="Password Baru"
-            class="w-full border px-4 py-2 rounded-md"
-          />
-          <input
-            type="password"
-            placeholder="Konfirmasi Password Baru"
-            class="w-full border px-4 py-2 rounded-md"
-          />
-          <button
-            type="submit"
-            class="bg-primary hover:bg-pink-400 text-white px-6 py-2 rounded-button font-medium"
-          >
-            Perbarui Password
-          </button>
-        </form>
-      </section>
+            <div class="space-y-6">
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 flex items-center"><i class="ri-notification-line mr-2"></i> Notifikasi</h3>
+                    <div class="flex items-center justify-between py-2 border-b last:border-b-0 border-gray-100">
+                        <label for="email-notifications" class="text-gray-700">Notifikasi Email</label>
+                        <input type="checkbox" id="email-notifications" class="form-checkbox h-5 w-5 text-primary rounded-md focus:ring-primary" checked>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b last:border-b-0 border-gray-100">
+                        <label for="promo-notifications" class="text-gray-700">Promo & Penawaran</label>
+                        <input type="checkbox" id="promo-notifications" class="form-checkbox h-5 w-5 text-primary rounded-md focus:ring-primary">
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 flex items-center"><i class="ri-lock-line mr-2"></i> Privasi</h3>
+                    <div class="flex items-center justify-between py-2 border-b last:border-b-0 border-gray-100">
+                        <span class="text-gray-700">Ubah Kata Sandi</span>
+                        <button class="text-primary hover:text-orangeDark font-medium">Ubah</button>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b last:border-b-0 border-gray-100">
+                        <span class="text-gray-700">Kelola Sesi Login</span>
+                        <button class="text-primary hover:text-orangeDark font-medium">Kelola</button>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3 flex items-center"><i class="ri-settings-line mr-2"></i> Umum</h3>
+                    <div class="flex items-center justify-between py-2 border-b last:border-b-0 border-gray-100">
+                        <label for="language-select" class="text-gray-700">Bahasa</label>
+                        <select id="language-select" class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="id">Bahasa Indonesia</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button class="bg-primary hover:bg-orangeDark text-white font-semibold py-3 px-8 rounded-button transition-colors">
+                    Simpan Pengaturan
+                </button>
+            </div>
+        </section>
     </main>
-  </body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userProfileButton = document.getElementById('user-profile-button');
+            const displayUsername = document.getElementById('display-username');
+            const logoutButtonTop = document.getElementById('logout-button-top');
+            const logoutButtonSidebar = document.getElementById('logout-button-sidebar');
+
+            // Autentikasi dan Logout (sama seperti di dashboard.html)
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userRole = localStorage.getItem('userRole');
+
+            if (isLoggedIn !== 'true' || userRole !== 'user') {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('rememberUsername');
+                window.location.href = "index.html";
+            } else {
+                const username = localStorage.getItem('rememberUsername');
+                if (username) {
+                    displayUsername.textContent = username;
+                }
+            }
+
+            function handleLogout() {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('rememberUsername');
+                localStorage.removeItem('cart');
+                window.location.href = "index.html";
+            }
+
+            logoutButtonTop.addEventListener('click', handleLogout);
+            logoutButtonSidebar.addEventListener('click', handleLogout);
+
+            // Perbarui jumlah item di keranjang (opsional)
+            function updateCartCountDisplay() {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const cartItemCountElement = document.getElementById('cart-item-count');
+
+                if (cartItemCountElement) {
+                    if (totalItems > 0) {
+                        cartItemCountElement.textContent = totalItems;
+                        cartItemCountElement.classList.remove('hidden');
+                    } else {
+                        cartItemCountElement.classList.add('hidden');
+                    }
+                }
+            }
+            updateCartCountDisplay();
+
+            // NOTES !! Next progress Logika untuk menyimpan pengaturan bisa ditambahkan di sini
+            // Misalnya, menyimpan preferensi notifikasi ke localStorage atau mengirim ke API.
+        });
+    </script>
+</body>
 </html>

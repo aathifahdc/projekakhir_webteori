@@ -9,18 +9,23 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { primary: "#FFB6C1", secondary: "#F5F5F5" },
+          colors: {
+            primary: '#FFA07A', 
+            secondary: '#FF8C61', 
+            orangeLight: '#FFD8CC',
+            orangeDark: '#FF7F50' 
+          },
           borderRadius: {
-            none: "0px",
-            sm: "4px",
-            DEFAULT: "8px",
-            md: "12px",
-            lg: "16px",
-            xl: "20px",
-            "2xl": "24px",
-            "3xl": "32px",
-            full: "9999px",
-            button: "8px",
+            'none': '0px',
+            'sm': '4px',
+            DEFAULT: '8px',
+            'md': '12px',
+            'lg': '16px',
+            'xl': '20px',
+            '2xl': '24px',
+            '3xl': '32px',
+            'full': '9999px',
+            'button': '8px'
           },
         },
       },
@@ -31,7 +36,7 @@
     rel="stylesheet"
   />
   <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
   />
   <link
@@ -42,91 +47,140 @@
     body {
       font-family: 'Open Sans', sans-serif;
       background-color: #FFF5F7;
+      display: flex; 
+      min-height: 100vh;
     }
     h1, h2, h3, h4, h5, h6 {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Open Sans', sans-serif; 
     }
     .logo-text {
       font-family: 'Pacifico', serif;
     }
-    /* Sidebar style */
+
     .sidebar {
-      background-color: #FFB6C1;
-      min-width: 220px;
-      border-radius: 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      h-screen;
+      w-64;
+      background-color: white; 
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      z-index: 50; 
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px; 
+    }
+    .sidebar .logo-container {
+        padding: 1rem; 
+        margin-bottom: 2rem;
+    }
+    .sidebar nav {
+        flex-grow: 1; 
     }
     .sidebar a {
       display: flex;
       align-items: center;
       padding: 12px 20px;
-      color: white;
-      font-weight: 600;
-      border-radius: 12px;
+      color: theme('colors.gray.800'); 
+      font-weight: 500; 
+      border-radius: 8px; 
       margin: 6px 12px;
       text-decoration: none;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .sidebar a:hover, .sidebar a.active {
-      background-color: #FF8DAA;
+      background-color: theme('colors.orangeLight'); 
+      color: theme('colors.primary');
     }
     .sidebar a i {
       margin-right: 12px;
       font-size: 1.3rem;
     }
-    /* Content style */
-    .content {
-      flex: 1;
-      padding: 24px;
+    .sidebar .logout-section {
+        margin-top: auto;
+        padding: 1rem;
+        border-top: 1px solid theme('colors.gray.200');
     }
+
+ 
+    body {
+        padding-left: 256px; 
+    }
+    .content {
+      flex-grow: 1;
+      padding: 2rem;
+      background-color: #fcfcfc;
+    }
+
+    .summary-card {
+        background-color: white; 
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+        border: 1px solid theme('colors.gray.200'); 
+    }
+
     table {
       border-collapse: collapse;
       width: 100%;
+      background-color: white; 
+      border-radius: 8px;
+      overflow: hidden; 
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
     th, td {
       padding: 12px 15px;
-      border-bottom: 1px solid #ddd;
       text-align: left;
     }
     th {
-      background-color: #FFB6C1;
+      background-color: theme('colors.primary')
       color: white;
       font-weight: 600;
+      border-bottom: none;
+    }
+    tbody tr {
+        border-bottom: 1px solid #ddd;
+    }
+    tbody tr:last-child {
+        border-bottom: none; 
     }
     tbody tr:hover {
-      background-color: #ffe2ec;
+      background-color: theme('colors.orangeLight');
     }
   </style>
 </head>
-<body class="min-h-screen flex p-6">
-  <aside class="sidebar flex flex-col rounded-2xl shadow-lg">
-    <div class="flex items-center justify-center py-6">
-      <div class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-md">
-        <span class="logo-text text-primary text-4xl">Marie</span>
+<body class="font-sans text-gray-800">
+  <aside class="sidebar">
+    <div class="logo-container">
+      <div class="flex items-center justify-center space-x-3">
+        <div class="w-12 h-12 flex items-center justify-center text-primary">
+          <i class="ri-footprint-fill ri-2x"></i>
+        </div>
+        <h1 class="text-3xl font-['Pacifico'] text-primary">Marie</h1>
       </div>
     </div>
-    <nav class="flex flex-col flex-grow">
-      <a href="#" class="active" aria-current="page">
+    <nav class="flex flex-col">
+      <a href="dashboardadmin.html" class="active" aria-current="page">
         <i class="ri-dashboard-line"></i> Dashboard
       </a>
-      <a href="#">
+      <a href="kelolaproduk.html">
         <i class="ri-store-line"></i> Kelola Produk
       </a>
-      <a href="#">
+      <a href="kelolapesanan.html">
         <i class="ri-shopping-bag-line"></i> Kelola Pesanan
       </a>
-      <a href="#">
+      <a href="kelolapengguna.html">
         <i class="ri-user-settings-line"></i> Kelola Pengguna
       </a>
-      <a href="#">
-        <i class="ri-settings-3-line"></i> Pengaturan
-      </a>
-      <a href="#">
-        <i class="ri-logout-box-line"></i> Logout
-      </a>
     </nav>
+    <div class="logout-section">
+        <button id="logout-button-sidebar" class="flex items-center text-gray-700 hover:text-red-500 cursor-pointer transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight w-full text-left">
+            <i class="ri-logout-box-line mr-3"></i>
+            <span>Keluar</span>
+        </button>
+    </div>
   </aside>
 
-  <main class="content bg-white rounded-2xl shadow-lg">
+  <main class="content">
     <header class="p-6 border-b border-gray-200">
       <h1 class="text-3xl font-bold text-gray-800">Halo, Admin Marie! 🐱‍👤</h1>
       <p class="text-gray-600 mt-1">Kelola toko dengan mudah dari dashboard ini.</p>
@@ -134,15 +188,15 @@
 
     <section class="p-6 space-y-6">
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div class="bg-primary/20 rounded-xl p-6 shadow-sm text-center">
+        <div class="summary-card p-6 shadow-sm text-center">
           <h2 class="font-semibold text-lg text-gray-800 mb-2">Total Produk</h2>
           <p class="text-gray-700 text-2xl font-bold">125</p>
         </div>
-        <div class="bg-primary/20 rounded-xl p-6 shadow-sm text-center">
+        <div class="summary-card p-6 shadow-sm text-center">
           <h2 class="font-semibold text-lg text-gray-800 mb-2">Pesanan Baru</h2>
           <p class="text-gray-700 text-2xl font-bold">27</p>
         </div>
-        <div class="bg-primary/20 rounded-xl p-6 shadow-sm text-center">
+        <div class="summary-card p-6 shadow-sm text-center">
           <h2 class="font-semibold text-lg text-gray-800 mb-2">Pengguna Terdaftar</h2>
           <p class="text-gray-700 text-2xl font-bold">842</p>
         </div>
@@ -187,5 +241,34 @@
       </div>
     </section>
   </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutButtonSidebar = document.getElementById('logout-button-sidebar');
+
+            // Handle Logout function
+            function handleLogout() {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userRole'); // Pastikan menghapus role admin juga
+                localStorage.removeItem('rememberUsername'); // Jika ada untuk admin
+                window.location.href = "landingpage.html"; // Redirect ke landing page
+            }
+
+            if (logoutButtonSidebar) {
+                logoutButtonSidebar.addEventListener('click', handleLogout);
+            }
+
+            // Optional: Tambahkan validasi autentikasi admin di sini
+            // Misalnya, jika admin harus login dari loginadmin.html dan memiliki role 'admin'
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userRole = localStorage.getItem('userRole');
+
+            if (isLoggedIn !== 'true' || userRole !== 'admin') { // Asumsi role admin adalah 'admin'
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('rememberUsername');
+                window.location.href = "landingpage.html"; // Atau halaman login admin spesifik
+            }
+        });
+    </script>
 </body>
 </html>

@@ -6,35 +6,77 @@
     <title>Logout - Marie Cat Shop</title>
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <script>
-      // Redirect otomatis ke halaman login (misalnya login.html) setelah 2 detik
-      setTimeout(() => {
-        window.location.href = "ldpageadmin.html"; // Ganti dengan login.php jika menggunakan backend
-      }, 2000);
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#FFA07A', 
+              secondary: '#FF8C61',
+              orangeLight: '#FFD8CC', 
+              orangeDark: '#FF7F50' 
+            },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+            keyframes: { 
+                'ping-slow': {
+                    '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+                    '50%': { transform: 'scale(1.2)', opacity: '0.5' },
+                }
+            },
+            animation: { i
+                'ping-slow': 'ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+            }
+          },
+        },
+      };
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
     <style>
       body {
         font-family: "Open Sans", sans-serif;
-        background-color: #fff5f7;
+        background-color: #FFD8CC ; 
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Poppins', sans-serif;
       }
     </style>
   </head>
-  <body class="flex items-center justify-center min-h-screen bg-secondary">
+  <body class="flex items-center justify-center min-h-screen">
     <div class="text-center p-6 bg-white rounded-2xl shadow-xl max-w-md w-full">
       <h1 class="text-3xl font-bold text-primary mb-4">Sampai Jumpa! 🐾</h1>
       <p class="text-gray-600 mb-4">
         Anda telah berhasil keluar dari Marie Cat Shop.
       </p>
       <div class="flex justify-center">
-        <svg
-          class="w-16 h-16 text-primary animate-ping-slow"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <circle cx="12" cy="12" r="10" stroke-width="2" />
-        </svg>
+        <i class="ri-footprint-fill text-primary text-6xl animate-ping-slow"></i>
       </div>
-      <p class="text-sm text-gray-500 mt-4">Mengalihkan ke halaman...</p>
+      <p class="text-sm text-gray-500 mt-4">Mengalihkan Anda ke halaman login...</p>
     </div>
+
+    <script>
+      // NOTES !! Perbarui target pengalihan ke landingpage.html yang merupakan halaman login.
+      setTimeout(() => {
+        window.location.href = "landingpage.html";
+      }, 2000);
+    </script>
   </body>
 </html>

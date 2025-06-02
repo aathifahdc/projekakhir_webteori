@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Pengguna - Marie Cat Shop</title>
+    <title>Wishlist - Marie Cat Shop</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
@@ -37,12 +37,12 @@
         }
     </script>
     <style>
-        /* ... (CSS yang sama dari kode Anda sebelumnya) ... */
+        /* Salin semua CSS dari dashboard.html */
         :where([class^="ri-"])::before { content: "\f3c2"; }
         body {
             font-family: 'Open Sans', sans-serif;
             background-color: #FFF5F7;
-            display: flex; /* Ensure layout works with fixed sidebar */
+            display: flex;
             min-height: 100vh;
         }
         h1, h2, h3, h4, h5, h6 {
@@ -50,9 +50,6 @@
         }
         .logo-text {
             font-family: 'Pacifico', serif;
-        }
-        .paw-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 20c-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5 4.5 2 4.5 4.5-2 4.5-4.5 4.5zm-10 5c-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5 4.5 2 4.5 4.5-2 4.5-4.5 4.5zm20 0c-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5 4.5 2 4.5 4.5-2 4.5-4.5 4.5zm-15 15c-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5 4.5 2 4.5 4.5-2 4.5-4.5 4.5zm10 5c-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5 4.5 2 4.5 4.5-2 4.5-4.5 4.5z' fill='%23FFA07A' fill-opacity='0.1'/%3E%3C/svg%3E");
         }
         .nav-link {
             position: relative;
@@ -84,118 +81,49 @@
             align-items: center;
             justify-content: center;
         }
-        .product-card:hover { /* Ini masih ada, tapi sectionnya sudah dihapus. Sebaiknya dihapus juga jika tidak dipakai */
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(255, 160, 122, 0.2), 0 4px 6px -2px rgba(255, 160, 122, 0.1);
-        }
-        .category-card:hover { /* Ini masih ada, tapi sectionnya sudah dihapus. Sebaiknya dihapus juga jika tidak dipakai */
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(255, 160, 122, 0.2), 0 4px 6px -2px rgba(255, 160, 122, 0.1);
-        }
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 15px -3px rgba(255, 160, 122, 0.3), 0 4px 6px -2px rgba(255, 160, 122, 0.2);
-        }
-
-        /* Adjust body padding for sidebar */
         body {
-            padding-left: 256px; /* corresponds to w-64 for sidebar */
+            padding-left: 256px;
         }
-
-        /* Fixed top bar for cart and login/register buttons */
         #top-bar {
             position: fixed;
             top: 0;
             right: 0;
-            left: 256px; /* Adjust left when sidebar is visible */
+            left: 256px;
             background-color: rgba(255, 255, 255, 0.95);
             padding: 1rem;
             display: flex;
-            justify-content: flex-end; /* Align to right */
+            justify-content: flex-end;
             align-items: center;
             gap: 1rem;
-            z-index: 40; /* Below sidebar, above content */
+            z-index: 40;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            width: calc(100% - 256px); /* Occupy remaining width */
+            width: calc(100% - 256px);
         }
-
-        /* Adjust main content padding for top bar */
-        #main-dashboard-content {
+        #main-content {
             flex-grow: 1;
             padding: 2rem;
-            padding-top: 5rem; /* Space for the top bar */
+            padding-top: 5rem;
             background-color: #fcfcfc;
         }
-
-        /* Hide auth buttons and show user profile/logout for dashboard */
         #auth-buttons {
             display: none !important;
         }
         #user-profile-button, #logout-button-top {
-            display: flex !important; /* Show these buttons on dashboard */
+            display: flex !important;
         }
-
-        /* Styles for product detail modal and cart modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal-content {
-            background-color: white;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 600px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-        }
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-        }
-        .modal-content .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #888;
-        }
-        .cart-item {
+        /* Tambahkan CSS untuk item wishlist jika diperlukan */
+        .wishlist-item {
             display: flex;
             align-items: center;
-            margin-bottom: 1rem;
             border-bottom: 1px solid #eee;
-            padding-bottom: 0.5rem;
+            padding: 1rem 0;
+            gap: 1rem;
         }
-        .cart-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-        .cart-item img {
-            width: 60px;
-            height: 60px;
+        .wishlist-item img {
+            width: 80px;
+            height: 80px;
             object-fit: cover;
             border-radius: 4px;
-            margin-right: 1rem;
         }
     </style>
 </head>
@@ -231,7 +159,7 @@
                 <h1 class="text-3xl font-['Pacifico'] text-primary">Marie</h1>
             </div>
             <nav class="flex flex-col space-y-4">
-                <a href="dashboarduser.html" class="nav-link font-medium text-primary hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                <a href="dashboarduser.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
                     <i class="ri-home-line mr-3"></i>Beranda
                 </a>
                 <a href="produk.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
@@ -240,7 +168,7 @@
                 <a href="pesananuser.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
                     <i class="ri-shopping-bag-line mr-3"></i> Pesanan Saya
                 </a>
-                <a href="wishlist.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
+                <a href="wishlist.html" class="nav-link font-medium text-primary hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
                     <i class="ri-heart-line mr-3"></i> Wishlist
                 </a>
                 <a href="profile.html" class="nav-link font-medium text-gray-800 hover:text-primary transition-colors px-4 py-2 rounded-lg hover:bg-orangeLight">
@@ -259,30 +187,35 @@
         </div>
     </header>
 
-    <main id="main-dashboard-content">
-        <section id="dashboard-summary" class="mb-12">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">Halo, Selamat Datang di Dashboard Anda!</h1>
-            <p class="text-gray-700 mb-4">Ini adalah area aman khusus untuk pengguna yang sudah login.</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Pesanan Terbaru</h3>
-                    <p class="text-gray-600">Anda memiliki 2 pesanan yang belum diproses.</p>
-                    <a href="orders.html" class="text-primary hover:text-orangeDark font-medium mt-3 inline-block">Lihat Pesanan</a>
+    <main id="main-content">
+        <section id="wishlist-section" class="bg-white p-8 rounded-lg shadow-md">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Wishlist Saya</h1>
+            <p class="text-gray-700 mb-4">Produk yang Anda inginkan:</p>
+
+            <div class="space-y-4" id="wishlist-items-container">
+                <div class="wishlist-item">
+                    <img src="catbed.jpg" alt="Tempat Tidur" class="rounded-md">
+                    <div class="flex-grow">
+                        <h3 class="font-semibold text-lg text-gray-800">Tempat Tidur Marie</h3>
+                        <p class="text-gray-600">Rp 349.000</p>
+                    </div>
+                    <button class="bg-primary hover:bg-orangeDark text-white px-4 py-2 rounded-button text-sm transition-colors">Tambah ke Keranjang</button>
+                    <button class="text-red-500 hover:text-red-700 px-2 py-1 rounded-sm"><i class="ri-delete-bin-line"></i></button>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Poin Reward</h3>
-                    <p class="text-gray-600">Anda memiliki 500 poin reward yang bisa ditukar!</p>
-                    <a href="#" class="text-primary hover:text-orangeDark font-medium mt-3 inline-block">Tukar Poin</a>
+
+                <div class="wishlist-item">
+                    <img src="catfood.jpg" alt="Makanan Premium " class="rounded-md">
+                    <div class="flex-grow">
+                        <h3 class="font-semibold text-lg text-gray-800">Makanan Premium Marie</h3>
+                        <p class="text-gray-600">Rp 125.000</p>
+                    </div>
+                    <button class="bg-primary hover:bg-orangeDark text-white px-4 py-2 rounded-button text-sm transition-colors">Tambah ke Keranjang</button>
+                    <button class="text-red-500 hover:text-red-700 px-2 py-1 rounded-sm"><i class="ri-delete-bin-line"></i></button>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Pengaturan Akun</h3>
-                    <p class="text-gray-600">Perbarui profil Anda untuk pengalaman yang lebih baik.</p>
-                    <a href="profile.html" class="text-primary hover:text-orangeDark font-medium mt-3 inline-block">Edit Profil</a>
-                </div>
+                <p id="empty-wishlist-message" class="text-center text-gray-600 hidden">Wishlist Anda kosong.</p>
             </div>
         </section>
-
-        </main>
+    </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -291,7 +224,7 @@
             const logoutButtonTop = document.getElementById('logout-button-top');
             const logoutButtonSidebar = document.getElementById('logout-button-sidebar');
 
-            // Autentikasi dan Logout
+            // Autentikasi dan Logout (sama seperti di dashboard.html)
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             const userRole = localStorage.getItem('userRole');
 
@@ -299,7 +232,7 @@
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('userRole');
                 localStorage.removeItem('rememberUsername');
-                window.location.href = "landingpage.html"; // Arahkan kembali ke halaman login/landing
+                window.location.href = "index.html";
             } else {
                 const username = localStorage.getItem('rememberUsername');
                 if (username) {
@@ -311,20 +244,20 @@
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('userRole');
                 localStorage.removeItem('rememberUsername');
-                localStorage.removeItem('cart'); // Clear cart on logout
-                window.location.href = "landingpage.html";
+                localStorage.removeItem('cart');
+                window.location.href = "index.html";
             }
 
             logoutButtonTop.addEventListener('click', handleLogout);
             logoutButtonSidebar.addEventListener('click', handleLogout);
 
-            // Perbarui jumlah item di keranjang (opsional, jika Anda ingin jumlahnya muncul di setiap halaman)
+            // Perbarui jumlah item di keranjang (opsional)
             function updateCartCountDisplay() {
                 const cart = JSON.parse(localStorage.getItem('cart')) || [];
                 const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
                 const cartItemCountElement = document.getElementById('cart-item-count');
 
-                if (cartItemCountElement) { // Pastikan elemen ada
+                if (cartItemCountElement) {
                     if (totalItems > 0) {
                         cartItemCountElement.textContent = totalItems;
                         cartItemCountElement.classList.remove('hidden');
@@ -333,7 +266,10 @@
                     }
                 }
             }
-            updateCartCountDisplay(); // Panggil saat halaman dimuat
+            updateCartCountDisplay();
+
+            // NOTES!! next progress implementasikan fungsi 'add to wishlist' di halaman produk
+            // dan fungsi 'remove from wishlist' serta 'add to cart from wishlist' di sini.
         });
     </script>
 </body>
