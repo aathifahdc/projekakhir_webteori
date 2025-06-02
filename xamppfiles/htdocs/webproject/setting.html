@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pengaturan - Marie Cat Shop</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#FFB6C1", secondary: "#F5F5F5" },
+            borderRadius: { button: "8px", "2xl": "24px" },
+          },
+        },
+      };
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      body {
+        font-family: "Open Sans", sans-serif;
+        background-color: #fff5f7;
+      }
+      .logo-text {
+        font-family: "Pacifico", serif;
+      }
+      .sidebar {
+        background-color: #ffb6c1;
+        min-width: 220px;
+        border-radius: 16px;
+      }
+      .sidebar a {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        color: white;
+        font-weight: 600;
+        border-radius: 12px;
+        margin: 6px 12px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+      .sidebar a:hover,
+      .sidebar a.active {
+        background-color: #ff8daa;
+      }
+      .sidebar a i {
+        margin-right: 12px;
+        font-size: 1.3rem;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex p-6">
+    <!-- Sidebar -->
+    <aside class="sidebar flex flex-col rounded-2xl shadow-lg">
+      <div class="flex items-center justify-center py-6">
+        <div
+          class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-md"
+        >
+          <span class="logo-text text-primary text-4xl">Marie</span>
+        </div>
+      </div>
+      <nav class="flex flex-col flex-grow">
+        <a href="dashboardadmin.html"
+          ><i class="ri-dashboard-line"></i> Dashboard</a
+        >
+        <a href="kelolaproduk.html"
+          ><i class="ri-store-line"></i> Kelola Produk</a
+        >
+        <a href="kelolapesanan.html"
+          ><i class="ri-shopping-bag-line"></i> Kelola Pesanan</a
+        >
+        <a href="kelolapengguna.html"
+          ><i class="ri-user-settings-line"></i> Kelola Pengguna</a
+        >
+        <a href="setting.html" class="active"
+          ><i class="ri-settings-3-line"></i> Pengaturan</a
+        >
+        <a href="logout.php"><i class="ri-logout-box-line"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="bg-white rounded-2xl shadow-lg flex-1 p-8 space-y-8">
+      <header class="border-b pb-4">
+        <h1 class="text-3xl font-bold text-gray-800">Pengaturan ⚙️</h1>
+        <p class="text-gray-600">Ubah informasi toko dan akun admin.</p>
+      </header>
+
+      <section>
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Informasi Toko</h2>
+        <form class="space-y-4">
+          <input
+            type="text"
+            placeholder="Nama Toko"
+            value="Marie Cat Shop"
+            class="w-full border px-4 py-2 rounded-md"
+          />
+          <input
+            type="email"
+            placeholder="Email Toko"
+            value="admin@mariecatshop.com"
+            class="w-full border px-4 py-2 rounded-md"
+          />
+          <textarea
+            placeholder="Alamat Toko"
+            rows="3"
+            class="w-full border px-4 py-2 rounded-md"
+          >
+Jl. Meong Bahagia No. 123</textarea
+          >
+          <button
+            type="submit"
+            class="bg-primary hover:bg-pink-400 text-white px-6 py-2 rounded-button font-medium"
+          >
+            Simpan Perubahan
+          </button>
+        </form>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-semibold mb-4 text-gray-700">Ubah Password</h2>
+        <form class="space-y-4">
+          <input
+            type="password"
+            placeholder="Password Lama"
+            class="w-full border px-4 py-2 rounded-md"
+          />
+          <input
+            type="password"
+            placeholder="Password Baru"
+            class="w-full border px-4 py-2 rounded-md"
+          />
+          <input
+            type="password"
+            placeholder="Konfirmasi Password Baru"
+            class="w-full border px-4 py-2 rounded-md"
+          />
+          <button
+            type="submit"
+            class="bg-primary hover:bg-pink-400 text-white px-6 py-2 rounded-button font-medium"
+          >
+            Perbarui Password
+          </button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

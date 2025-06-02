@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kelola Pesanan - Marie Cat Shop</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#FFB6C1", secondary: "#F5F5F5" },
+            borderRadius: { button: "8px", "2xl": "24px" },
+          },
+        },
+      };
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      body {
+        font-family: "Open Sans", sans-serif;
+        background-color: #fff5f7;
+      }
+      .logo-text {
+        font-family: "Pacifico", serif;
+      }
+      .sidebar {
+        background-color: #ffb6c1;
+        min-width: 220px;
+        border-radius: 16px;
+      }
+      .sidebar a {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        color: white;
+        font-weight: 600;
+        border-radius: 12px;
+        margin: 6px 12px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+      .sidebar a:hover,
+      .sidebar a.active {
+        background-color: #ff8daa;
+      }
+      .sidebar a i {
+        margin-right: 12px;
+        font-size: 1.3rem;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+      }
+      th {
+        background-color: #ffb6c1;
+        color: white;
+        font-weight: 600;
+      }
+      tbody tr:hover {
+        background-color: #ffe2ec;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex p-6">
+    <!-- Sidebar -->
+    <aside class="sidebar flex flex-col rounded-2xl shadow-lg">
+      <div class="flex items-center justify-center py-6">
+        <div
+          class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-md"
+        >
+          <span class="logo-text text-primary text-4xl">Marie</span>
+        </div>
+      </div>
+      <nav class="flex flex-col flex-grow">
+        <a href="dashboardadmin.html"
+          ><i class="ri-dashboard-line"></i> Dashboard</a
+        >
+        <a href="kelolaproduk.html"
+          ><i class="ri-store-line"></i> Kelola Produk</a
+        >
+        <a href="kelolapesanan.html" class="active" aria-current="page"
+          ><i class="ri-shopping-bag-line"></i> Kelola Pesanan</a
+        >
+        <a href="kelolapengguna.html"
+          ><i class="ri-user-settings-line"></i> Kelola Pengguna</a
+        >
+        <a href="setting.html"><i class="ri-settings-3-line"></i> Pengaturan</a>
+        <a href="logout.html"><i class="ri-logout-box-line"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content bg-white rounded-2xl shadow-lg flex-1">
+      <header class="p-6 border-b border-gray-200">
+        <h1 class="text-3xl font-bold text-gray-800">Kelola Pesanan 📦</h1>
+      </header>
+
+      <section class="p-6 space-y-6">
+        <div class="flex justify-between items-center">
+          <h2 class="font-semibold text-xl text-gray-800">Daftar Pesanan</h2>
+          <button
+            onclick="openForm()"
+            class="bg-primary hover:bg-pink-400 text-white font-medium py-2 px-4 rounded-button flex items-center gap-2"
+          >
+            <i class="ri-add-line"></i> Tambah Pesanan
+          </button>
+        </div>
+
+        <!-- Tabel Pesanan -->
+        <div class="overflow-x-auto">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nama Pelanggan</th>
+                <th>Produk</th>
+                <th>Jumlah</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="orderTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal Form -->
+    <div
+      id="orderModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+    >
+      <div class="bg-white rounded-xl shadow-lg p-6 w-[90%] max-w-md">
+        <h2 id="modalTitle" class="text-xl font-semibold mb-4">
+          Tambah Pesanan
+        </h2>
+        <form id="orderForm" class="space-y-4" onsubmit="saveOrder(event)">
+          <input type="hidden" id="orderId" />
+          <input
+            id="pelanggan"
+            type="text"
+            placeholder="Nama Pelanggan"
+            class="w-full border px-4 py-2 rounded-md"
+            required
+          />
+          <input
+            id="produk"
+            type="text"
+            placeholder="Produk Dipesan"
+            class="w-full border px-4 py-2 rounded-md"
+            required
+          />
+          <input
+            id="jumlah"
+            type="number"
+            placeholder="Jumlah"
+            class="w-full border px-4 py-2 rounded-md"
+            required
+          />
+          <input
+            id="total"
+            type="number"
+            placeholder="Total Harga"
+            class="w-full border px-4 py-2 rounded-md"
+            required
+          />
+          <select
+            id="status"
+            class="w-full border px-4 py-2 rounded-md"
+            required
+          >
+            <option value="Menunggu">Menunggu</option>
+            <option value="Diproses">Diproses</option>
+            <option value="Dikirim">Dikirim</option>
+            <option value="Selesai">Selesai</option>
+          </select>
+          <div class="flex justify-end gap-2">
+            <button
+              type="button"
+              onclick="closeForm()"
+              class="bg-gray-300 px-4 py-2 rounded-md"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              class="bg-primary text-white px-4 py-2 rounded-md"
+            >
+              Simpan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Script -->
+    <script>
+      let orders = [
+        {
+          id: "O001",
+          pelanggan: "Ani",
+          produk: "Marie Hoodie",
+          jumlah: 2,
+          total: 300000,
+          status: "Diproses",
+        },
+        {
+          id: "O002",
+          pelanggan: "Budi",
+          produk: "Catnip Toy",
+          jumlah: 1,
+          total: 50000,
+          status: "Menunggu",
+        },
+      ];
+
+      function renderTable() {
+        const table = document.getElementById("orderTable");
+        table.innerHTML = "";
+        orders.forEach((o, index) => {
+          table.innerHTML += `
+          <tr>
+            <td>${o.id}</td>
+            <td>${o.pelanggan}</td>
+            <td>${o.produk}</td>
+            <td>${o.jumlah}</td>
+            <td>Rp ${o.total.toLocaleString()}</td>
+            <td>${o.status}</td>
+            <td class="space-x-2">
+              <button onclick="editOrder(${index})" class="text-blue-600 hover:underline">Edit</button>
+              <button onclick="deleteOrder(${index})" class="text-red-600 hover:underline">Hapus</button>
+            </td>
+          </tr>`;
+        });
+      }
+
+      function openForm(edit = false) {
+        document.getElementById("orderModal").classList.remove("hidden");
+        document.getElementById("modalTitle").textContent = edit
+          ? "Edit Pesanan"
+          : "Tambah Pesanan";
+      }
+
+      function closeForm() {
+        document.getElementById("orderForm").reset();
+        document.getElementById("orderId").value = "";
+        document.getElementById("orderModal").classList.add("hidden");
+      }
+
+      function saveOrder(event) {
+        event.preventDefault();
+        const idInput = document.getElementById("orderId").value;
+        const pelanggan = document.getElementById("pelanggan").value;
+        const produk = document.getElementById("produk").value;
+        const jumlah = parseInt(document.getElementById("jumlah").value);
+        const total = parseInt(document.getElementById("total").value);
+        const status = document.getElementById("status").value;
+
+        if (idInput) {
+          const index = orders.findIndex((o) => o.id === idInput);
+          orders[index] = {
+            id: idInput,
+            pelanggan,
+            produk,
+            jumlah,
+            total,
+            status,
+          };
+        } else {
+          const newId = "O" + String(orders.length + 1).padStart(3, "0");
+          orders.push({ id: newId, pelanggan, produk, jumlah, total, status });
+        }
+
+        renderTable();
+        closeForm();
+      }
+
+      function editOrder(index) {
+        const o = orders[index];
+        document.getElementById("orderId").value = o.id;
+        document.getElementById("pelanggan").value = o.pelanggan;
+        document.getElementById("produk").value = o.produk;
+        document.getElementById("jumlah").value = o.jumlah;
+        document.getElementById("total").value = o.total;
+        document.getElementById("status").value = o.status;
+        openForm(true);
+      }
+
+      function deleteOrder(index) {
+        if (confirm("Yakin ingin menghapus pesanan ini?")) {
+          orders.splice(index, 1);
+          renderTable();
+        }
+      }
+
+      renderTable();
+    </script>
+  </body>
+</html>

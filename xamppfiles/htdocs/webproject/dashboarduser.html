@@ -1,14 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>User Dashboard</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard User - Marie Cat Shop</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: "#FFB6C1", secondary: "#F5F5F5" },
+          borderRadius: {
+            none: "0px",
+            sm: "4px",
+            DEFAULT: "8px",
+            md: "12px",
+            lg: "16px",
+            xl: "20px",
+            "2xl": "24px",
+            "3xl": "32px",
+            full: "9999px",
+            button: "8px",
+          },
+        },
+      },
+    };
+  </script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+  />
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #FFF5F7;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Poppins', sans-serif;
+    }
+    .logo-text {
+      font-family: 'Pacifico', serif;
+    }
+    /* Sidebar style */
+    .sidebar {
+      background-color: #FFB6C1;
+      min-width: 220px;
+      border-radius: 16px;
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: white;
+      font-weight: 600;
+      border-radius: 12px;
+      margin: 6px 12px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .sidebar a:hover, .sidebar a.active {
+      background-color: #FF8DAA;
+    }
+    .sidebar a i {
+      margin-right: 12px;
+      font-size: 1.3rem;
+    }
+    /* Content style */
+    .content {
+      flex: 1;
+      padding: 24px;
+    }
+  </style>
 </head>
-<body>
-  <h1>Welcome, User!</h1>
-  <nav>
-    <a href="products.html">View Products</a>
-    <a href="php/logout.php">Logout</a>
-  </nav>
+<body class="min-h-screen flex p-6">
+  <aside class="sidebar flex flex-col rounded-2xl shadow-lg">
+    <div class="flex items-center justify-center py-6">
+      <div class="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-md">
+        <span class="logo-text text-primary text-4xl">Marie</span>
+      </div>
+    </div>
+    <nav class="flex flex-col flex-grow">
+      <a href="#" class="active" aria-current="page">
+        <i class="ri-home-line"></i> Beranda
+      </a>
+      <a href="#">
+        <i class="ri-shopping-cart-line"></i> Produk
+      </a>
+      <a href="#">
+        <i class="ri-heart-line"></i> Favorit
+      </a>
+      <a href="#">
+        <i class="ri-settings-3-line"></i> Pengaturan
+      </a>
+      <a href="#">
+        <i class="ri-logout-box-line"></i> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <main class="content bg-white rounded-2xl shadow-lg">
+    <header class="p-6 border-b border-gray-200">
+      <h1 class="text-3xl font-bold text-gray-800">Halo, User Marie! 🐾</h1>
+      <p class="text-gray-600 mt-1">Selamat datang di dashboard pengguna kamu.</p>
+    </header>
+
+    <section class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div class="bg-primary/20 rounded-xl p-6 shadow-sm">
+        <h2 class="font-semibold text-lg text-gray-800 mb-2">Pesanan Terbaru</h2>
+        <p class="text-gray-600">Belum ada pesanan terbaru.</p>
+      </div>
+      <div class="bg-primary/20 rounded-xl p-6 shadow-sm">
+        <h2 class="font-semibold text-lg text-gray-800 mb-2">Wishlist Kamu</h2>
+        <p class="text-gray-600">Kamu belum menambahkan produk ke wishlist.</p>
+      </div>
+      <div class="bg-primary/20 rounded-xl p-6 shadow-sm">
+        <h2 class="font-semibold text-lg text-gray-800 mb-2">Informasi Akun</h2>
+        <ul class="text-gray-600">
+          <li>Nama: Marie User</li>
+          <li>Email: user@mariecatshop.com</li>
+          <li>Member Sejak: Mei 2025</li>
+        </ul>
+      </div>
+      <div class="bg-primary/20 rounded-xl p-6 shadow-sm">
+        <h2 class="font-semibold text-lg text-gray-800 mb-2">Tips Merawat Kucing</h2>
+        <p class="text-gray-600">Jangan lupa beri makanan berkualitas dan rutin bermain bersama!</p>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

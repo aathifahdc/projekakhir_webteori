@@ -238,39 +238,6 @@
       </div>
     </div>
 
-  
-    <div
-      id="roleModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden"
-    >
-      <div class="bg-white rounded-lg p-6 max-w-md w-full">
-        <h3 class="text-xl font-bold text-gray-800 mb-4">
-          Pilih Peran untuk Demo
-        </h3>
-        <p class="text-gray-600 mb-6">
-          Pilih peran untuk melihat dashboard yang sesuai:
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <button
-            id="adminRole"
-            class="bg-primary/10 hover:bg-primary/20 text-gray-800 font-medium py-3 px-4 rounded-button border-2 border-primary flex flex-col items-center"
-          >
-            <i class="ri-admin-line text-2xl text-primary mb-2"></i>
-            <span>Admin</span>
-          </button>
-
-          <button
-            id="userRole"
-            class="bg-secondary hover:bg-secondary/80 text-gray-800 font-medium py-3 px-4 rounded-button border-2 border-gray-200 flex flex-col items-center"
-          >
-            <i class="ri-user-line text-2xl text-gray-600 mb-2"></i>
-            <span>Pengguna</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
     <script id="password-toggle">
       document.addEventListener("DOMContentLoaded", function () {
         const togglePassword = document.getElementById("togglePassword");
@@ -303,7 +270,6 @@
     const passwordError = document.getElementById("passwordError");
     const loadingOverlay = document.getElementById("loadingOverlay");
 
-    // ✅ Data akun untuk demo
     const users = [
       { username: "admin", password: "admin123", role: "admin" },
       { username: "user1", password: "user123", role: "user" },
@@ -313,7 +279,6 @@
     loginForm.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      // Reset error
       usernameError.classList.add("hidden");
       passwordError.classList.add("hidden");
 
@@ -337,7 +302,6 @@
       }
 
       if (isValid) {
-        // Tampilkan loading
         loadingOverlay.classList.remove("hidden");
 
         setTimeout(function () {
@@ -351,9 +315,9 @@
 
           if (foundUser) {
             if (foundUser.role === "admin") {
-              window.location.href = "admin-dashboard.html";
+              window.location.href = "dashboardadmin.html";
             } else {
-              window.location.href = "user-dashboard.html";
+              window.location.href = "dashboarduser.html";
             }
           } else {
             passwordError.textContent = "Username atau password salah";
@@ -372,11 +336,11 @@
         const userRole = document.getElementById("userRole");
 
         adminRole.addEventListener("click", function () {
-          window.location.href = "admin-dashboard.html";
+          window.location.href = "dashboardadmin.html";
         });
 
         userRole.addEventListener("click", function () {
-          window.location.href = "user-dashboard.html";
+          window.location.href = "dashboarduser.html";
         });
       });
     </script>
