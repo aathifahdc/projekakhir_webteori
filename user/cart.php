@@ -103,7 +103,7 @@ foreach ($cart_items as $item) {
                         <div class="flex items-center">
                             <div class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center mr-4">
                                 <?php if ($item['image']): ?>
-                                <img src="../uploads/<?php echo $item['image']; ?>" alt="<?php echo $item['name']; ?>" class="w-full h-full object-cover rounded-lg">
+                                <img src="../assets/<?php echo $item['image']; ?>" alt="<?php echo $item['name']; ?>" class="w-full h-full object-cover rounded-lg">
                                 <?php else: ?>
                                 <i class="ri-image-line text-2xl text-gray-400"></i>
                                 <?php endif; ?>
