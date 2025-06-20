@@ -220,7 +220,7 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 
 <script>
 function addToCart(productId) {
-    const qty = document.getElementById(qty-${productId}).value;
+    const qty = document.getElementById(`qty-${productId}`).value;
 
     fetch('add_to_cart.php', {
         method: 'POST',

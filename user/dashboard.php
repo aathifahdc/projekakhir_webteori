@@ -392,7 +392,7 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             const toastMessage = document.getElementById('toast-message');
             
             toastMessage.textContent = message;
-            toast.className = toast ${type};
+            toast.className = `toast ${type}`;
             toast.classList.add('show');
             
             setTimeout(() => {
