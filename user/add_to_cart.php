@@ -10,12 +10,18 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'user') {
 require_once '../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $product_id = $data['product_id'] ?? null;
+    $quantity = $data['quantity'] ?? 1;
+
+    if (!$product_id) {
+        echo json_encode(['success' => false, 'message' => 'ID produk tidak valid']);
+        exit();
+    }
+
     $database = new Database();
     $db = $database->getConnection();
-    
     $user_id = $_SESSION['user_id'];
-    $product_id = $_POST['product_id'];
-    $quantity = $_POST['quantity'] ?? 1;
     
     // Check if product exists and has stock
     $product_query = "SELECT stock FROM products WHERE id = ? AND status = 'active'";
@@ -56,13 +62,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $insert_stmt = $db->prepare($insert_query);
         $success = $insert_stmt->execute([$user_id, $product_id, $quantity]);
     }
+
+    // Get updated cart count
+    $count_stmt = $db->prepare("SELECT SUM(quantity) as total FROM cart WHERE user_id = ?");
+    $count_stmt->execute([$user_id]);
+    $total_cart = $count_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
     
     if ($success) {
-        echo json_encode(['success' => true, 'message' => 'Produk berhasil ditambahkan ke keranjang']);
+        echo json_encode([
+            'success' => true,
+            'message' => 'Produk berhasil ditambahkan ke keranjang',
+            'cart_count' => $total_cart
+        ]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Error menambahkan ke keranjang']);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
 }
-?>

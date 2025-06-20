@@ -9,11 +9,9 @@ require_once '../config/database.php';
 $database = new Database();
 $db = $database->getConnection();
 
-// Get search and filter parameters
 $search = $_GET['search'] ?? '';
 $category = $_GET['category'] ?? '';
 
-// Build query
 $query = "SELECT p.*, c.name as category_name FROM products p 
           LEFT JOIN categories c ON p.category_id = c.id 
           WHERE p.status = 'active'";
@@ -23,37 +21,31 @@ if ($search) {
     $query .= " AND p.name LIKE ?";
     $params[] = "%$search%";
 }
-
 if ($category) {
     $query .= " AND p.category_id = ?";
     $params[] = $category;
 }
-
 $query .= " ORDER BY p.created_at DESC";
-
 $stmt = $db->prepare($query);
 $stmt->execute($params);
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Get categories for filter
-$cat_query = "SELECT * FROM categories ORDER BY name";
-$cat_stmt = $db->prepare($cat_query);
+// Kategori
+$cat_stmt = $db->prepare("SELECT * FROM categories ORDER BY name");
 $cat_stmt->execute();
 $categories = $cat_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Get cart count
-$cart_query = "SELECT SUM(quantity) as total FROM cart WHERE user_id = ?";
-$cart_stmt = $db->prepare($cart_query);
+// Cart count
+$cart_stmt = $db->prepare("SELECT SUM(quantity) as total FROM cart WHERE user_id = ?");
 $cart_stmt->execute([$_SESSION['user_id']]);
 $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produk - FreshMart</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Produk - Marie Pet Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -79,28 +71,16 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             background-color: #FFF5F7;
             display: flex;
             min-height: 100vh;
-            padding: 0;
         }
         .logo-text { font-family: 'Pacifico', serif; }
-        
         .sidebar {
             flex-shrink: 0;
             width: 256px;
             background-color: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             padding-top: 20px;
-            min-height: 100vh;
-            align-self: stretch;
         }
-        .sidebar .logo-container {
-            padding: 1rem;
-            margin-bottom: 2rem;
-        }
-        .sidebar nav { flex-grow: 1; }
-        .sidebar a {
+        .sidebar nav a {
             display: flex;
             align-items: center;
             padding: 12px 20px;
@@ -109,29 +89,13 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             border-radius: 8px;
             margin: 6px 12px;
             text-decoration: none;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: 0.3s;
             position: relative;
         }
-        .sidebar a:hover, .sidebar a.active {
+        .sidebar nav a:hover, .sidebar nav a.active {
             background-color: #FFD8CC;
             color: #FFA07A;
         }
-        .sidebar a i {
-            margin-right: 12px;
-            font-size: 1.3rem;
-        }
-        .sidebar .logout-section {
-            margin-top: auto;
-            padding: 1rem;
-            border-top: 1px solid #e5e7eb;
-        }
-        
-        .content {
-            flex-grow: 1;
-            padding: 2rem;
-            background-color: #fcfcfc;
-        }
-        
         .cart-badge {
             background-color: #FF7F50;
             color: white;
@@ -139,171 +103,170 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             padding: 2px 6px;
             font-size: 0.75rem;
             position: absolute;
-            top: -8px;
-            right: -8px;
+            top: -6px;
+            right: -10px;
             min-width: 20px;
             text-align: center;
         }
-        
+        .content {
+            flex-grow: 1;
+            padding: 2rem;
+            background-color: #fcfcfc;
+        }
         .product-card {
             background: white;
             border-radius: 16px;
             padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: 0.2s;
         }
         .product-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10B981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show { transform: translateX(0); }
+        .toast.error { background: #EF4444; }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo-container">
-            <h1 class="logo-text text-2xl text-primary">Marie Pet Shop</h1>
-            <p class="text-sm text-gray-600">Happy Shopping!</p>
-        </div>
-        
-        <nav>
-            <a href="dashboard.php">
-                <i class="ri-store-line"></i>
-                Beranda
-            </a>
-            <a href="products.php" class="active">
-                <i class="ri-shopping-bag-line"></i>
-                Produk
-            </a>
-            <a href="cart.php">
-                <i class="ri-shopping-cart-line"></i>
-                Keranjang
-                <?php if ($cart_count > 0): ?>
-                <span class="cart-badge"><?php echo $cart_count; ?></span>
-                <?php endif; ?>
-            </a>
-            <a href="orders.php">
-                <i class="ri-file-list-line"></i>
-                Pesanan Saya
-            </a>
-            <a href="profile.php">
-                <i class="ri-user-line"></i>
-                Profile
-            </a>
-        </nav>
-        
-        <div class="logout-section">
-            <a href="../auth/logout.php">
-                <i class="ri-logout-box-line"></i>
-                Logout
-            </a>
-        </div>
-    </div>
 
-    <!-- Main Content -->
-    <div class="content">
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Semua Produk</h1>
-            <p class="text-gray-600">Temukan produk yang Anda butuhkan</p>
-        </div>
-        
-        <!-- Search and Filter -->
-        <div class="bg-white p-6 rounded-lg shadow mb-8">
-            <form method="GET" class="flex gap-4">
-                <div class="flex-1">
-                    <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>" 
-                           placeholder="Cari produk..." 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
-                </div>
-                <div>
-                    <select name="category" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
-                        <option value="">Semua Kategori</option>
-                        <?php foreach ($categories as $cat): ?>
-                        <option value="<?php echo $cat['id']; ?>" <?php echo $category == $cat['id'] ? 'selected' : ''; ?>>
-                            <?php echo $cat['name']; ?>
-                        </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <button type="submit" class="bg-primary text-white px-6 py-2 rounded-button hover:bg-secondary transition-colors">
-                    <i class="ri-search-line mr-2"></i>Cari
-                </button>
-            </form>
-        </div>
-        
-        <!-- Products Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <?php foreach ($products as $product): ?>
-            <div class="product-card">
-                <div class="h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
-                    <?php if ($product['image']): ?>
-                    <img src="../assets/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" class="h-full w-full object-cover rounded-lg">
-                    <?php else: ?>
-                    <i class="ri-image-line text-4xl text-gray-400"></i>
-                    <?php endif; ?>
-                </div>
-                
-                <div class="mb-2">
-                    <span class="text-xs bg-orangeLight text-primary px-2 py-1 rounded-full">
-                        <?php echo $product['category_name']; ?>
-                    </span>
-                </div>
-                
-                <h3 class="text-lg font-semibold mb-2"><?php echo $product['name']; ?></h3>
-                <p class="text-gray-600 text-sm mb-3"><?php echo substr($product['description'], 0, 100); ?>...</p>
-                
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-xl font-bold text-primary">Rp <?php echo number_format($product['price']); ?></span>
-                    <span class="text-sm text-gray-500">Stok: <?php echo $product['stock']; ?></span>
-                </div>
-                
-                <div class="flex gap-2">
-                    <input type="number" min="1" max="<?php echo $product['stock']; ?>" value="1" 
-                           class="flex-1 px-3 py-2 border border-gray-300 rounded-lg" 
-                           id="qty-<?php echo $product['id']; ?>">
-                    <button onclick="addToCart(<?php echo $product['id']; ?>)" 
-                            class="bg-primary text-white px-4 py-2 rounded-button hover:bg-secondary transition-colors">
-                        <i class="ri-shopping-cart-line"></i>
-                    </button>
-                </div>
-            </div>
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="logo-container px-4 mb-4">
+        <h1 class="logo-text text-2xl text-primary">Marie Pet Shop</h1>
+        <p class="text-sm text-gray-600">Happy Shopping!</p>
+    </div>
+    <nav>
+        <a href="dashboard.php"><i class="ri-store-line mr-2"></i> Beranda</a>
+        <a href="products.php" class="active"><i class="ri-shopping-bag-line mr-2"></i> Produk</a>
+        <a href="cart.php">
+            <i class="ri-shopping-cart-line mr-2"></i> Keranjang
+            <?php if ($cart_count > 0): ?>
+            <span class="cart-badge"><?= $cart_count ?></span>
+            <?php endif; ?>
+        </a>
+        <a href="orders.php"><i class="ri-file-list-line mr-2"></i> Pesanan Saya</a>
+        <a href="profile.php"><i class="ri-user-line mr-2"></i> Profil</a>
+    </nav>
+    <div class="logout-section mt-auto px-4 py-4 border-t border-gray-200">
+        <a href="../auth/logout.php"><i class="ri-logout-box-line mr-2"></i> Logout</a>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="content">
+    <h1 class="text-3xl font-bold mb-6">Semua Produk</h1>
+
+    <!-- Filter Form -->
+    <form method="GET" class="flex gap-4 bg-white p-4 rounded-lg shadow mb-6">
+        <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Cari produk..." class="flex-1 border px-4 py-2 rounded-lg">
+        <select name="category" class="border px-4 py-2 rounded-lg">
+            <option value="">Semua Kategori</option>
+            <?php foreach ($categories as $cat): ?>
+            <option value="<?= $cat['id'] ?>" <?= $category == $cat['id'] ? 'selected' : '' ?>><?= $cat['name'] ?></option>
             <?php endforeach; ?>
+        </select>
+        <button type="submit" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-secondary">
+            <i class="ri-search-line"></i>
+        </button>
+    </form>
+
+    <!-- Produk Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <?php foreach ($products as $product): ?>
+        <div class="product-card">
+            <div class="h-48 mb-4 overflow-hidden rounded-lg">
+                <img src="../assets/<?= $product['image'] ?>" alt="<?= $product['name'] ?>" class="w-full h-full object-cover">
+            </div>
+            <span class="text-xs bg-orangeLight text-primary px-2 py-1 rounded-full"><?= $product['category_name'] ?></span>
+            <h3 class="text-lg font-semibold mt-2"><?= $product['name'] ?></h3>
+            <p class="text-sm text-gray-600 mb-2"><?= substr($product['description'], 0, 100) ?>...</p>
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-xl font-bold text-primary">Rp <?= number_format($product['price']) ?></span>
+                <span class="text-sm text-gray-500">Stok: <?= $product['stock'] ?></span>
+            </div>
+            <div class="flex gap-2">
+                <input type="number" min="1" max="<?= $product['stock'] ?>" value="1" id="qty-<?= $product['id'] ?>" class="w-16 border px-2 py-1 rounded-lg">
+                <button onclick="addToCart(<?= $product['id'] ?>)" class="bg-primary text-white px-4 py-2 rounded-button hover:bg-secondary">
+                    <i class="ri-shopping-cart-line"></i>
+                </button>
+            </div>
         </div>
-        
-        <?php if (empty($products)): ?>
-        <div class="text-center py-12">
-            <i class="ri-search-line text-6xl text-gray-400 mb-4"></i>
-            <h2 class="text-2xl font-semibold text-gray-900 mb-2">Produk tidak ditemukan</h2>
-            <p class="text-gray-600">Coba ubah kata kunci pencarian atau filter kategori</p>
-        </div>
-        <?php endif; ?>
+        <?php endforeach; ?>
     </div>
 
-    <script>
-        function addToCart(productId) {
-            const quantity = document.getElementById(`qty-${productId}`).value;
-            
-            fetch('add_to_cart.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `product_id=${productId}&quantity=${quantity}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Produk berhasil ditambahkan ke keranjang!');
-                    location.reload();
-                } else {
-                    alert(data.message || 'Error menambahkan produk ke keranjang');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan');
-            });
+    <?php if (empty($products)): ?>
+    <div class="text-center py-12 text-gray-500">Produk tidak ditemukan.</div>
+    <?php endif; ?>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast hidden">
+    <span id="toast-message"></span>
+</div>
+
+<script>
+function addToCart(productId) {
+    const qty = document.getElementById(qty-${productId}).value;
+
+    fetch('add_to_cart.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product_id: productId, quantity: qty })
+    })
+    .then(res => res.json())
+    .then(data => {
+        showToast(data.message, data.success ? 'success' : 'error');
+        if (data.success) updateCartBadge();
+    })
+    .catch(() => showToast('Terjadi kesalahan.', 'error'));
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-message');
+    toastMsg.textContent = message;
+    toast.classList.remove('hidden', 'error');
+    toast.classList.add('show');
+    if (type === 'error') toast.classList.add('error');
+    setTimeout(() => { toast.classList.remove('show'); }, 3000);
+}
+
+function updateCartBadge() {
+    fetch('get_cart_count.php')
+    .then(res => res.json())
+    .then(data => {
+        const badge = document.querySelector('.cart-badge');
+        const cartLink = document.querySelector('a[href="cart.php"]');
+        if (data.total > 0) {
+            if (!badge) {
+                const span = document.createElement('span');
+                span.className = 'cart-badge';
+                span.textContent = data.total;
+                cartLink.appendChild(span);
+            } else {
+                badge.textContent = data.total;
+            }
+        } else if (badge) {
+            badge.remove();
         }
-    </script>
+    });
+}
+
+window.onload = updateCartBadge;
+</script>
 </body>
 </html>

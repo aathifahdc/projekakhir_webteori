@@ -37,21 +37,12 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             theme: {
                 extend: {
                     colors: {
-                        primary: '#FFA07A', // Oranye utama
-                        secondary: '#FF8C61', // Oranye sekunder
-                        orangeLight: '#FFD8CC', // Oranye terang
-                        orangeDark: '#FF7F50' // Oranye gelap
+                        primary: '#FFA07A',
+                        secondary: '#FF8C61',
+                        orangeLight: '#FFD8CC',
+                        orangeDark: '#FF7F50'
                     },
                     borderRadius: {
-                        'none': '0px',
-                        'sm': '4px',
-                        DEFAULT: '8px',
-                        'md': '12px',
-                        'lg': '16px',
-                        'xl': '20px',
-                        '2xl': '24px',
-                        '3xl': '32px',
-                        'full': '9999px',
                         'button': '8px'
                     },
                 },
@@ -62,7 +53,6 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
     <style>
-        /* Styling sesuai dengan yang diminta */
         body {
             font-family: 'Open Sans', sans-serif;
             background-color: #FFF5F7;
@@ -77,10 +67,9 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             font-family: 'Pacifico', serif;
         }
 
-        /* Sidebar - konsisten dengan dashboard admin yang memanjang */
         .sidebar {
             flex-shrink: 0;
-            width: 256px; /* width-64 */
+            width: 256px;
             background-color: white;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             z-index: 50;
@@ -101,7 +90,7 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             display: flex;
             align-items: center;
             padding: 12px 20px;
-            color: #1f2937; /* gray-800 */
+            color: #1f2937;
             font-weight: 500;
             border-radius: 8px;
             margin: 6px 12px;
@@ -110,8 +99,8 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             position: relative;
         }
         .sidebar a:hover, .sidebar a.active {
-            background-color: #FFD8CC; /* orangeLight */
-            color: #FFA07A; /* primary */
+            background-color: #FFD8CC;
+            color: #FFA07A;
         }
         .sidebar a i {
             margin-right: 12px;
@@ -120,7 +109,7 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
         .sidebar .logout-section {
             margin-top: auto;
             padding: 1rem;
-            border-top: 1px solid #e5e7eb; /* gray-200 */
+            border-top: 1px solid #e5e7eb;
         }
 
         .content {
@@ -153,9 +142,35 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             transform: translateY(-2px);
             box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
         }
+
+        /* Toast notification styles */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10B981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+        .toast.error {
+            background: #EF4444;
+        }
     </style>
 </head>
 <body>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span id="toast-message"></span>
+    </div>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo-container">
@@ -175,7 +190,7 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             <a href="cart.php">
                 <i class="ri-shopping-cart-line"></i>
                 Keranjang
-                <span class="cart-badge">3</span>
+                <span class="cart-badge" id="cart-count"><?= $cart_count ?></span>
             </a>
             <a href="orders.php">
                 <i class="ri-file-list-line"></i>
@@ -202,129 +217,188 @@ $cart_count = $cart_stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
             <p class="text-gray-600">Temukan produk terbaik dengan harga terjangkau untuk anabul kesayangan!</p>
         </div>
         
-  <!-- Produk Unggulan Pet Shop -->
-<div class="mb-8">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6">Produk Unggulan</h2>
-  
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    
-    <!-- Makanan Kucing -->
-    <div class="product-card">
-      <div class="h-48 rounded-lg mb-4 overflow-hidden">
-        <img src="../assets/catfood.jpg" alt="Makanan Kucing" class="w-full h-full object-cover">
-      </div>
-      <h3 class="text-lg font-semibold mb-2">Makanan Kucing Premium</h3>
-      <p class="text-gray-600 text-sm mb-2">Gizi lengkap dan lezat untuk kucing Anda</p>
-      <div class="flex justify-between items-center mb-4">
-        <span class="text-xl font-bold text-primary">Rp 35.000</span>
-        <span class="text-sm text-gray-500">Stok: 40</span>
-      </div>
-      <button class="w-full bg-primary text-white py-2 rounded-button hover:bg-secondary transition-colors">
-        <i class="ri-shopping-cart-line mr-2"></i> Tambah ke Keranjang
-      </button>
-    </div>
+        <!-- Produk Unggulan Pet Shop -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Produk Unggulan</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Makanan Kucing -->
+                <div class="product-card">
+                    <div class="h-48 rounded-lg mb-4 overflow-hidden">
+                        <img src="../assets/catfood.jpg" alt="Makanan Kucing" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Makanan Kucing Premium</h3>
+                    <p class="text-gray-600 text-sm mb-2">Gizi lengkap dan lezat untuk kucing Anda</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xl font-bold text-primary">Rp 35.000</span>
+                        <span class="text-sm text-gray-500">Stok: 40</span>
+                    </div>
+                    <button onclick="addToCart(1, 'Makanan Kucing Premium', 35000)" class="w-full bg-primary text-white py-2 rounded-button hover:bg-secondary transition-colors">
+                        <i class="ri-shopping-cart-line mr-2"></i> Tambah ke Keranjang
+                    </button>
+                </div>
 
-    <!-- Kalung Kucing -->
-    <div class="product-card">
-      <div class="h-48 rounded-lg mb-4 overflow-hidden">
-        <img src="../assets/kalungkucing.jpg" alt="Kalung Kucing" class="w-full h-full object-cover">
-      </div>
-      <h3 class="text-lg font-semibold mb-2">Kalung Kucing Lucu</h3>
-      <p class="text-gray-600 text-sm mb-2">Aksesoris lucu untuk kucing kesayangan</p>
-      <div class="flex justify-between items-center mb-4">
-        <span class="text-xl font-bold text-primary">Rp 20.000</span>
-        <span class="text-sm text-gray-500">Stok: 25</span>
-      </div>
-      <button class="w-full bg-primary text-white py-2 rounded-button hover:bg-secondary transition-colors">
-        <i class="ri-shopping-cart-line mr-2"></i> Tambah ke Keranjang
-      </button>
-    </div>
+                <!-- Kalung Kucing -->
+                <div class="product-card">
+                    <div class="h-48 rounded-lg mb-4 overflow-hidden">
+                        <img src="../assets/kalungkucing.jpg" alt="Kalung Kucing" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Kalung Kucing Lucu</h3>
+                    <p class="text-gray-600 text-sm mb-2">Aksesoris lucu untuk kucing kesayangan</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xl font-bold text-primary">Rp 20.000</span>
+                        <span class="text-sm text-gray-500">Stok: 25</span>
+                    </div>
+                    <button onclick="addToCart(2, 'Kalung Kucing Lucu', 20000)" class="w-full bg-primary text-white py-2 rounded-button hover:bg-secondary transition-colors">
+                        <i class="ri-shopping-cart-line mr-2"></i> Tambah ke Keranjang
+                    </button>
+                </div>
 
-    <!-- Sisir Hewan -->
-    <div class="product-card">
-      <div class="h-48 rounded-lg mb-4 overflow-hidden">
-        <img src="../assets/sisirgrooming.jpg" alt="Sisir Hewan" class="w-full h-full object-cover">
-      </div>
-      <h3 class="text-lg font-semibold mb-2">Sisir Bulu Kucing</h3>
-      <p class="text-gray-600 text-sm mb-2">Menjaga bulu tetap rapi dan sehat</p>
-      <div class="flex justify-between items-center mb-4">
-        <span class="text-xl font-bold text-primary">Rp 15.000</span>
-        <span class="text-sm text-gray-500">Stok: 60</span>
-      </div>
-      <button class="w-full bg-primary text-white py-2 rounded-button hover:bg-secondary transition-colors">
-        <i class="ri-shopping-cart-line mr-2"></i> Tambah ke Keranjang
-      </button>
-    </div>
+                <!-- Sisir Hewan -->
+                <div class="product-card">
+                    <div class="h-48 rounded-lg mb-4 overflow-hidden">
+                        <img src="../assets/sisirgrooming.jpg" alt="Sisir Hewan" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Sisir Bulu Kucing</h3>
+                    <p class="text-gray-600 text-sm mb-2">Menjaga bulu tetap rapi dan sehat</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xl font-bold text-primary">Rp 15.000</span>
+                        <span class="text-sm text-gray-500">Stok: 60</span>
+                    </div>
+                    <button onclick="addToCart(3, 'Sisir Bulu Kucing', 15000)" class="w-full bg-primary text-white py-2 rounded-button hover:bg-secondary transition-colors">
+                        <i class="ri-shopping-cart-line mr-2"></i> Tambah ke Keranjang
+                    </button>
+                </div>
 
-    <!-- Tempat Tidur -->
-    <div class="product-card">
-      <div class="h-48 rounded-lg mb-4 overflow-hidden">
-        <img src="../assets/catbed.jpg" alt="Tempat Tidur Kucing" class="w-full h-full object-cover">
-      </div>
-      <h3 class="text-lg font-semibold mb-2">Tempat Tidur Kucing</h3>
-      <p class="text-gray-600 text-sm mb-2">Nyaman dan empuk untuk tidur si kucing</p>
-      <div class="flex justify-between items-center mb-4">
-        <span class="text-xl font-bold text-primary">Rp 85.000</span>
-        <span class="text-sm text-gray-500">Stok: 15</span>
-      </div>
-      <button class="w-full bg-primary text-white py-2 rounded-button hover:bg-secondary transition-colors">
-        <i class="ri-shopping-cart-line mr-2"></i> Tambah ke Keranjang
-      </button>
-    </div>
+                <!-- Tempat Tidur -->
+                <div class="product-card">
+                    <div class="h-48 rounded-lg mb-4 overflow-hidden">
+                        <img src="../assets/catbed.jpg" alt="Tempat Tidur Kucing" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Tempat Tidur Kucing</h3>
+                    <p class="text-gray-600 text-sm mb-2">Nyaman dan empuk untuk tidur si kucing</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xl font-bold text-primary">Rp 85.000</span>
+                        <span class="text-sm text-gray-500">Stok: 15</span>
+                    </div>
+                    <button onclick="addToCart(4, 'Tempat Tidur Kucing', 85000)" class="w-full bg-primary text-white py-2 rounded-button hover:bg-secondary transition-colors">
+                        <i class="ri-shopping-cart-line mr-2"></i> Tambah ke Keranjang
+                    </button>
+                </div>
 
-    <!-- Mainan Kucing -->
-    <div class="product-card">
-      <div class="h-48 rounded-lg mb-4 overflow-hidden">
-        <img src="../assets/cattoy.jpg" alt="Mainan Kucing" class="w-full h-full object-cover">
-      </div>
-      <h3 class="text-lg font-semibold mb-2">Mainan Kucing Interaktif</h3>
-      <p class="text-gray-600 text-sm mb-2">Melatih dan menghibur kucing Anda</p>
-      <div class="flex justify-between items-center mb-4">
-        <span class="text-xl font-bold text-primary">Rp 18.000</span>
-        <span class="text-sm text-gray-500">Stok: 30</span>
-      </div>
-      <button class="w-full bg-primary text-white py-2 rounded-button hover:bg-secondary transition-colors">
-        <i class="ri-shopping-cart-line mr-2"></i> Tambah ke Keranjang
-      </button>
-    </div>
+                <!-- Mainan Kucing -->
+                <div class="product-card">
+                    <div class="h-48 rounded-lg mb-4 overflow-hidden">
+                        <img src="../assets/cattoy.jpg" alt="Mainan Kucing" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Mainan Kucing Interaktif</h3>
+                    <p class="text-gray-600 text-sm mb-2">Melatih dan menghibur kucing Anda</p>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xl font-bold text-primary">Rp 18.000</span>
+                        <span class="text-sm text-gray-500">Stok: 30</span>
+                    </div>
+                    <button onclick="addToCart(5, 'Mainan Kucing Interaktif', 18000)" class="w-full bg-primary text-white py-2 rounded-button hover:bg-secondary transition-colors">
+                        <i class="ri-shopping-cart-line mr-2"></i> Tambah ke Keranjang
+                    </button>
+                </div>
 
-  </div>
-</div>
+            </div>
+        </div>
 
         <!-- Categories -->
-<div class="mb-12">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6">Kategori Produk</h2>
+        <div class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Kategori Produk</h2>
 
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-    <!-- Makanan -->
-    <div class="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition-shadow">
-      <i class="ri-restaurant-line text-4xl text-primary mb-3"></i>
-      <h3 class="font-semibold">Makanan</h3>
-      <p class="text-sm text-gray-500">Nutrisi lengkap untuk hewan</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Makanan -->
+                <div class="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition-shadow">
+                    <i class="ri-restaurant-line text-4xl text-primary mb-3"></i>
+                    <h3 class="font-semibold">Makanan</h3>
+                    <p class="text-sm text-gray-500">Nutrisi lengkap untuk hewan</p>
+                </div>
+
+                <!-- Aksesoris -->
+                <div class="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition-shadow">
+                    <i class="ri-collar-line text-4xl text-primary mb-3"></i>
+                    <h3 class="font-semibold">Aksesoris</h3>
+                    <p class="text-sm text-gray-500">Kalung, baju, dan perlengkapan lucu</p>
+                </div>
+
+                <!-- Perawatan -->
+                <div class="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition-shadow">
+                    <i class="ri-scissors-2-line text-4xl text-primary mb-3"></i>
+                    <h3 class="font-semibold">Perawatan</h3>
+                    <p class="text-sm text-gray-500">Sisir, sampo, dan peralatan grooming</p>
+                </div>
+
+                <!-- Mainan -->
+                <div class="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition-shadow">
+                    <i class="ri-gamepad-line text-4xl text-primary mb-3"></i>
+                    <h3 class="font-semibold">Mainan</h3>
+                    <p class="text-sm text-gray-500">Mainan seru dan edukatif</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Aksesoris -->
-    <div class="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition-shadow">
-      <i class="ri-collar-line text-4xl text-primary mb-3"></i>
-      <h3 class="font-semibold">Aksesoris</h3>
-      <p class="text-sm text-gray-500">Kalung, baju, dan perlengkapan lucu</p>
-    </div>
+    <script>
+        function addToCart(productId, productName, price) {
+            // Show loading state
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="ri-loader-4-line mr-2 animate-spin"></i> Menambahkan...';
+            button.disabled = true;
 
-    <!-- Perawatan -->
-    <div class="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition-shadow">
-      <i class="ri-scissors-2-line text-4xl text-primary mb-3"></i>
-      <h3 class="font-semibold">Perawatan</h3>
-      <p class="text-sm text-gray-500">Sisir, sampo, dan peralatan grooming</p>
-    </div>
+            // Send AJAX request
+            fetch('add_to_cart.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    product_name: productName,
+                    price: price,
+                    quantity: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update cart count
+                    document.getElementById('cart-count').textContent = data.cart_count;
+                    
+                    // Show success toast
+                    showToast(data.message, 'success');
+                } else {
+                    // Show error toast
+                    showToast(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Terjadi kesalahan saat menambahkan produk', 'error');
+            })
+            .finally(() => {
+                // Reset button
+                button.innerHTML = originalText;
+                button.disabled = false;
+            });
+        }
 
-    <!-- Mainan -->
-    <div class="bg-white p-6 rounded-lg shadow text-center hover:shadow-lg transition-shadow">
-      <i class="ri-gamepad-line text-4xl text-primary mb-3"></i>
-      <h3 class="font-semibold">Mainan</h3>
-      <p class="text-sm text-gray-500">Mainan seru dan edukatif</p>
-    </div>
-  </div>
-</div>
-
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+            toast.className = toast ${type};
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
