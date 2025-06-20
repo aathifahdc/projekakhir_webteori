@@ -83,8 +83,7 @@ $loggedIn = isset($_SESSION['user_id']);
         </button>
       </div>
    <!-- Sisir Hewan -->
-                <div class="product-card">
-                    <div class="h-48 rounded-lg mb-4 overflow-hidden">
+                <div class="bg-white p-4 rounded-xl shadow product-card">
                         <img src="../assets/sisirgrooming.jpg" alt="Sisir Hewan" class="w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-semibold mb-2">Sisir Bulu Kucing</h3>
@@ -99,8 +98,7 @@ $loggedIn = isset($_SESSION['user_id']);
                 </div>
 
                 <!-- Tempat Tidur -->
-                <div class="product-card">
-                    <div class="h-48 rounded-lg mb-4 overflow-hidden">
+       <div class="bg-white p-4 rounded-xl shadow product-card">
                         <img src="../assets/catbed.jpg" alt="Tempat Tidur Kucing" class="w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-semibold mb-2">Tempat Tidur Kucing</h3>
@@ -115,8 +113,7 @@ $loggedIn = isset($_SESSION['user_id']);
                 </div>
 
                 <!-- Mainan Kucing -->
-                <div class="product-card">
-                    <div class="h-48 rounded-lg mb-4 overflow-hidden">
+               <div class="bg-white p-4 rounded-xl shadow product-card">
                         <img src="../assets/cattoy.jpg" alt="Mainan Kucing" class="w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-semibold mb-2">Mainan Kucing Interaktif</h3>
